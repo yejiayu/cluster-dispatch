@@ -1,0 +1,24 @@
+{
+  "name": "ams-cluster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": {
+    "name": "叶嘉雨",
+    "email": "wb-yjy181847@alibaba-inc.com"
+  },
+  "dependencies": {
+    "eslint": "^3.6.1",
+    "eslint-config-airbnb-base": "^5.0.3",
+    "eslint-plugin-import": "^1.16.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://gitlab.alibaba-inc.com/ams-node/cluster.git"
+  },
+  "license": "ISC"
+}
