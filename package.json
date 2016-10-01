@@ -1,6 +1,6 @@
 {
   "name": "cluster-dispatch",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "node多进程管理",
   "main": "index.js",
   "author": {
