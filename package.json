@@ -1,8 +1,8 @@
 {
   "name": "cluster-dispatch",
-  "version": "1.0.1",
-  "description": "",
-  "main": "lib/dispatch.js",
+  "version": "1.0.6",
+  "description": "node多进程管理",
+  "main": "index.js",
   "author": {
     "name": "叶嘉雨",
     "email": "yejiayu.fe@gmail.com"
