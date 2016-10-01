@@ -6,40 +6,44 @@
 $ npm i cluster-dispatch --save
 ````
 # Example
+
+## 初始化
+
 ````js
-const Dispatch = require('cluster-dispatch')
+const Dispatch = require('cluster-dispatch').Dispach
 
 // 指定根路径, app默认启动文件为根路径的index.js library默认启动 根路径+/library/index.js
 const dispatch = new Dispach({
   baseDir: __dirname, // default process.cwd()
 })
+````
 
-// 接收app message
-dispatch.on('app-mesaage', data => {
-  logger.info(data)
-});
+## 进程间通信
+````js
+const messager = require('cluster-dispatch').messager
 
-// 接收library message
-// library/redis-client
-process.send({
-  name: 'redis-client',
-  message: '消息',
+// library发送消息给app
+
+// library/index.js
+messager.sendToApp({
+  message: 'library message',
 })
-
-dispatch.on('redis-client', data => {
-  logger.info(data) // {  message: '消息'}
-});
-
-// 从library发送消息到app
-dispatch.sendToApp({
-  message: 'xxx',
-});
 
 // index.js
-process.on('message', data => {
-  console.log(data) // { mesaage: 'xxx' }
+messager.on('library', data => {
+  logger.info(data) // { message : 'library message' }
 })
 
-// $ curl locahost:8080/user/name
-// user name
+
+// app发送消息给library
+
+// index.js
+messager.sendToLibrary({
+  message: 'app message',
+})
+
+// library/index.js
+messager.on('app', data => {
+  logger.info(data) // { message : 'app message' }
+})
 ````
