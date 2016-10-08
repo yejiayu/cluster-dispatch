@@ -1,24 +1,29 @@
 {
-  "name": "ams-cluster",
-  "version": "1.0.0",
-  "description": "",
+  "name": "cluster-dispatch",
+  "version": "1.0.8",
+  "description": "node多进程管理",
   "main": "index.js",
   "author": {
     "name": "叶嘉雨",
-    "email": "wb-yjy181847@alibaba-inc.com"
+    "email": "yejiayu.fe@gmail.com"
   },
   "dependencies": {
+    "cfork": "^1.5.1",
+    "lodash": "^4.16.2",
+    "log4js": "^0.6.38",
+    "sdk-base": "^2.0.1"
+  },
+  "devDependencies": {
     "eslint": "^3.6.1",
     "eslint-config-airbnb-base": "^5.0.3",
     "eslint-plugin-import": "^1.16.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "http://gitlab.alibaba-inc.com/ams-node/cluster.git"
+    "url": "https://github.com/yejiayu/dispatch.git"
   },
   "license": "ISC"
 }
