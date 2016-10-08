@@ -1,3 +1,4 @@
-'use strict'
+'use strict';
 
-module.exports = require('./lib');
+exports.Dispatch = require('./lib/dispatch');
+exports.messager = require('./lib/messager');

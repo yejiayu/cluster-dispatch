@@ -12,4 +12,7 @@ temp
 
 npm-debug.log
 
+/library
+
+test
 coverage
