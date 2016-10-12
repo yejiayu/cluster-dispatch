@@ -5,7 +5,7 @@
   "main": "index.js",
   "author": {
     "name": "叶嘉雨",
-    "email": "yejiayu.fe@gmail.com"
+    "email": "wb-yjy181847@alibaba-inc.com"
   },
   "publishConfig": {                                                       
     "registry": "http://registry.npm.alibaba-inc.com"                      
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yejiayu/dispatch.git"
+    "url": "http://gitlab.alibaba-inc.com/ams-node/cluster.git"
   },
   "license": "ISC"
 }
