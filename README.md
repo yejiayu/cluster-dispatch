@@ -3,7 +3,7 @@
 
 # Installation
 ````js
-$ npm i cluster-dispatch --save
+$ tnpm i @ali/ams-cluster --save
 ````
 # Example
 
