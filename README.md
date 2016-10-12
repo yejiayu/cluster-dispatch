@@ -10,7 +10,7 @@ $ tnpm i @ali/ams-cluster --save
 ## 初始化
 
 ````js
-const Dispatch = require('cluster-dispatch').Dispach
+const Dispatch = require('@ali/ams-cluster').Dispach
 
 // 指定根路径, app默认启动文件为根路径的index.js library默认启动 根路径+/library/index.js
 const dispatch = new Dispach({
