@@ -1,14 +1,14 @@
 {
   "name": "@ali/ams-cluster",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "node多进程管理",
   "main": "index.js",
   "author": {
     "name": "叶嘉雨",
     "email": "wb-yjy181847@alibaba-inc.com"
   },
-  "publishConfig": {                                                       
-    "registry": "http://registry.npm.alibaba-inc.com"                      
+  "publishConfig": {
+    "registry": "http://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
     "cfork": "^1.5.1",
