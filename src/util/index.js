@@ -1,12 +1,12 @@
 'use strict';
 
-var fs = require('fs');
-var debug = require('debug')('cluster:util');
+const fs = require('fs');
+const debug = require('debug')('cluster:util');
 
 module.exports = {
   exists(path) {
     try {
-      var file = fs.statSync(path);
+      const file = fs.statSync(path);
       if (!file || !file.isFile()) {
         return false;
       }
@@ -19,6 +19,6 @@ module.exports = {
   },
 
   generateRequestId(prefix, NO) {
-    return `${ prefix }#${ NO }`;
-  }
+    return `${prefix}#${NO}`;
+  },
 };
