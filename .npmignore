@@ -1,0 +1,15 @@
+node_modules
+.DS_Store
+
+# vs code config
+jsconfig.json
+typings.json
+typings
+.vscode
+
+# temp
+temp
+
+npm-debug.log
+example
+coverage
