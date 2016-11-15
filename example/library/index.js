@@ -1,23 +1,38 @@
 'use strict';
 
+const MailBox = require('socket-messenger').MailBox;
 const co = require('co');
 const debug = require('debug')('cluster:library');
 
-const Messager = require('../../').Messager;
+const agent = require('./agent');
 
-const messager = new Messager();
+const ENV_ROLE = process.env.ROLE;
+const SOCK_PATH = process.env.SOCK_PATH;
+const name = `${ENV_ROLE}`;
 
-messager.on('message', debug);
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-debug('fork library');
+const handler = {
+  getAgents() {
+    return agent;
+  },
+};
 
 co(function* gen() {
-  while (true) {
-    yield sleep(3000 * 10);
-    debug('library sleep end');
-  }
+  const mailBox = new MailBox({ name, sockPath: SOCK_PATH });
+  yield mailBox.init();
+
+  mailBox.on('mail', mail => {
+    console.log('on mail');
+    const { action, data } = mail.message;
+    const result = handler[action](data);
+    mail.reply(result);
+  });
+
+  process.send({ ready: true });
+  // yield mailBox.writeMails()
+  //     .setTo('APP@\\w+')
+  //     .setMessage({
+  //       action: 'send_objs',
+  //       objs: agent,
+  //     })
+  //     .send({ duplex: false });
 }).catch(debug);
