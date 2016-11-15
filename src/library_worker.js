@@ -8,50 +8,51 @@ const SDKBase = require('sdk-base');
 const ROLE = require('./constant/role');
 const util = require('./util');
 
-const INIT = Symbol('init');
-
 class LibraryWorker extends SDKBase {
-  constructor({ baseDir, logging }) {
+  constructor({ baseDir, logging, sockPath }) {
     super();
     this.workerFile = `${baseDir}/library/index.js`;
     this.logging = logging;
+    this.sockPath = sockPath;
 
     assert(util.exists(this.workerFile), `library worker 目录 ${this.workerFile} 不存在或不是一个文件`);
 
     this.worker = null;
-
-    this[INIT]();
-    this.ready(true);
   }
 
-  [INIT]() {
-    const { workerFile, logging } = this;
-    this.worker = cp.fork(workerFile, {
-      env: { ROLE: ROLE.LIBRARY },
+  init() {
+    this.fork();
+  }
+
+  fork() {
+    const { workerFile, logging, sockPath } = this;
+
+    const worker = cp.fork(workerFile, {
+      env: {
+        ROLE: ROLE.LIBRARY,
+        SOCK_PATH: sockPath,
+      },
     });
 
-    logging(`library worker fork pid=${this.worker.pid}`);
-
-    this.worker.on('message', message => this.emit('message', message));
-
-    this.worker.on('error', error => logging(error.stack));
-    this.worker.once('exit', (code, signal) => {
-      logging(`library worker exit code=${code} signal=${signal}`);
-
-      this.worker.removeAllListeners();
-      this.worker = null;
-      if (process.env.NODE_ENV === 'production') {
-        this[INIT]();
+    worker.on('message', message => {
+      if (message && message.ready) {
+        this.ready(true);
       }
     });
-  }
 
-  send(message) {
-    const { to, form, data } = message;
+    logging(`library worker fork pid=${worker.pid}`);
 
-    if (to === ROLE.LIBRARY) {
-      this.worker.send({ form, data });
-    }
+    worker.on('error', error => logging(error.stack));
+    worker.once('exit', (code, signal) => {
+      logging(`library worker exit code=${code} signal=${signal}`);
+
+      worker.removeAllListeners();
+      if (process.env.NODE_ENV === 'production') {
+        this.fork();
+      }
+    });
+
+    this.worker = worker;
   }
 }
 

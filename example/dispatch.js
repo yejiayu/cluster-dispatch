@@ -1,5 +1,7 @@
 'use strict';
 
+const co = require('co');
+
 const Master = require('../').Master;
 const debug = require('debug')('cluster:dispatch');
 
@@ -8,6 +10,9 @@ const master = new Master({
   appName: 'cluster-example',
 });
 
-master.ready(() => debug('ready'));
-master.on('message', message => debug(message));
-master.on('error', error => debug(error.stack));
+co(function* gen() {
+  yield master.init();
+  master.ready(() => debug('ready'));
+
+  master.on('error', error => debug(error.stack));
+}).catch(error => debug(error.stack));

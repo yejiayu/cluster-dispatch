@@ -1,26 +1,33 @@
 'use strict';
 
-const logger = require('../lib/logger')('index:test');
+const Library = require('../src/agent/library');
+const mailBox = require('../example/app/mailBox');
+const co = require('co');
 
-// const Dispatch = require('../lib/dispatch');
+const objs = {
+  hsfClient: {
+    invoke() {
+      console.log('invoke');
+    },
+    getName() {
+      console.log('get name');
+    },
+  },
 
-const Dispatch = require('../lib/dispatch');
-new Dispatch();
+  dtsClient: {
+    getConfig() {
+      console.log('get config');
+    },
+    getTask() {
+      console.log('get task');
+    },
+  },
+};
+console.log(JSON.stringify(objs));
+const library = new Library({ objs, mailBox });
 
-// dispatch.on('app-mesaage', data => {
-//   logger.info(data.name);
-//   logger.info(data.message);
-//   dispatch.sendToLibrary({
-//     name: 'dts-client',
-//     message: 'xxx',
-//   });
-// });
-
-// dispatch.on('dts-client', data => {
-//   logger.info(data.name); // library name
-//   logger.info(data.message);
-
-//   dispatch.sendToApp({
-//     message: 'xxx',
-//   });
-// });
+co(function* gen() {
+  yield library.hsfClient.getName('invoke', [1, 2]);
+  yield library.hsfClient.invoke();
+  yield library.dtsClient.getConfig();
+}).catch(error => console.error(error.stack));

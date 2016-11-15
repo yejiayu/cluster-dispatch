@@ -3,19 +3,16 @@
 const co = require('co');
 const debug = require('debug')('cluster:app');
 
-const Messager = require('../../').Messager;
-
-const messager = new Messager();
-
-function sleep(ms) {
-  messager.sendToMaster('send master');
-  messager.sendToLibrary('send library');
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+const mailBox = require('./mail-box');
 
 co(function* gen() {
-  while (true) {
-    yield sleep(3000 * 10);
-    debug('app sleep end');
-  }
+  yield mailBox.init();
+  process.send({ ready: true });
+
+  const { message: agents, to } = yield mailBox.write()
+      .setTo('LIBRARY')
+      .setMessage({ action: 'getAgents' })
+      .send();
+
+  debug(agents, to);
 }).catch(debug);

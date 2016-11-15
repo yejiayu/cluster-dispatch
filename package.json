@@ -11,6 +11,7 @@
     "registry": "http://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
+    "socket-messenger": "git+https://github.com/yejiayu/socket-messenger.git#master",
     "@ali/ams-logger": "^2.3.0",
     "cfork": "^1.5.1",
     "co": "^4.6.0",
@@ -31,7 +32,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/babel src -d lib",
-    "watch": "./node_modules/.bin/babel src -w --out-dir lib"
+    "watch": "./node_modules/.bin/babel src -w --out-dir lib",
+    "example": "DEBUG=cluster:* node example/dispatch.js"
   },
   "repository": {
     "type": "git",
