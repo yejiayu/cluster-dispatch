@@ -11,7 +11,7 @@
     "registry": "http://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
-    "socket-messenger": "git+https://github.com/yejiayu/socket-messenger.git#master",
+    "socket-messenger": "~0.0.3",
     "@ali/ams-logger": "^2.3.0",
     "cfork": "^1.5.1",
     "co": "^4.6.0",
