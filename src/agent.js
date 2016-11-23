@@ -48,7 +48,7 @@ class Agent {
   }
 
   invoke({ objName, methodName }, ...rest) {
-    const { mailBox, eventMap, logging } = this;
+    const { mailBox, eventMap } = this;
 
     const args = Array.from(rest);
 
@@ -76,7 +76,7 @@ class Agent {
       const reply = yield mail.setMessage(message).send();
 
       return reply.message;
-    }).catch(logging);
+    });
   }
 
   mailHandler(mail) {

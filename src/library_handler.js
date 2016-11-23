@@ -2,7 +2,6 @@
 
 const co = require('co');
 const EventEmitter = require('events');
-const is = require('is-type-of');
 
 const { parseAgents } = require('./util');
 
@@ -39,15 +38,7 @@ class Handler extends EventEmitter {
         return;
       }
 
-      let result = null;
-      if (is.promise(method)) {
-        result = yield method.apply(lib[objName], args);
-      } else {
-        const fn = method.apply(lib[objName], args);
-        if (is.generator(fn)) {
-          result = yield fn;
-        }
-      }
+      const result = yield method.apply(lib[objName], args);
       mail.reply(result);
     }).catch(logging);
   }
