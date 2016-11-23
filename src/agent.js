@@ -47,11 +47,10 @@ class Agent {
     this.agentObjs = agentObjs;
   }
 
-  invoke(options) {
-    const { objName, methodName, mailBox, eventMap, logging } = this;
+  invoke({ objName, methodName }, ...rest) {
+    const { mailBox, eventMap, logging } = this;
 
-    const args = Array.from(...options);
-    args.shift();
+    const args = Array.from(rest);
 
     const mail = mailBox.write().setTo('LIBRARY');
     const message = {
@@ -90,7 +89,7 @@ class Agent {
         const { eventName, args } = message;
         const eventLib = this.eventMap.get(eventName);
 
-        eventLib.emit.apply(eventLib, [eventName].concat(args));
+        eventLib.emit(...[eventName].concat(args));
         break;
       }
 
