@@ -1,22 +1,18 @@
 'use strict';
 
-const path = require('path');
 const co = require('co');
 const EventEmitter = require('events');
 const is = require('is-type-of');
 
-const lib = require(path.join(process.cwd(), 'library/lib'));
-
 const { parseAgents } = require('./util');
 
-const agentLib = parseAgents(lib);
-
 class Handler extends EventEmitter {
-  constructor({ logging } = {}) {
+  constructor({ logging, lib } = {}) {
     super();
 
+    this.lib = lib;
+    this.agentLib = parseAgents(lib);
     this.logging = logging;
-    this.agentLib = agentLib;
   }
 
   getAgents(mail) {
@@ -27,6 +23,7 @@ class Handler extends EventEmitter {
     if (!invokeParams) {
       return;
     }
+    const { lib } = this;
     const { objName, methodName, args, isEvent, logging } = invokeParams;
     const method = lib[objName][methodName];
     const that = this;
