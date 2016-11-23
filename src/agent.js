@@ -90,7 +90,7 @@ class Agent {
         const { eventName, args } = message;
         const eventLib = this.eventMap.get(eventName);
 
-        eventLib.emit(...[eventName].concat(args));
+        eventLib.emit.apply(eventLib, [eventName].concat(args));
         break;
       }
 
