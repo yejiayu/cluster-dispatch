@@ -1,6 +1,6 @@
 {
   "name": "@ali/ams-cluster",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "node多进程管理",
   "main": "index.js",
   "author": {
