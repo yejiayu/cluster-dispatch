@@ -1,4 +1,5 @@
 'use strict';
 
 exports.Master = require('./lib/master');
-exports.Agent = require('./lib/agent');
+exports.AppClient = require('./lib/client/app');
+exports.LibraryClient = require('./lib/client/library');
