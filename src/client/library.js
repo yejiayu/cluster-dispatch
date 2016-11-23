@@ -11,18 +11,20 @@ const name = `${ENV_ROLE}`;
 
 
 class Library extends Base {
-  constructor({ logging } = {}) {
+  constructor({ logging, lib } = {}) {
     super();
 
+    this.lib = lib;
     this.logging = logging;
   }
 
   * init() {
+    const { lib, logging } = this;
     const mailBox = new MailBox({ name, sockPath: SOCK_PATH });
     yield mailBox.init();
     process.send({ ready: true });
 
-    const handler = new Handler();
+    const handler = new Handler({ lib, logging });
 
     handler.on('lib-event', (params) => {
       const eventName = params.eventName;
