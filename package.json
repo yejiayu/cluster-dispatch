@@ -1,6 +1,6 @@
 {
   "name": "@ali/ams-cluster",
-  "version": "1.3.0",
+  "version": "2.2.3",
   "description": "node多进程管理",
   "main": "index.js",
   "author": {
@@ -11,18 +11,30 @@
     "registry": "http://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
+    "@ali/ams-logger": "^2.3.0",
     "cfork": "^1.5.1",
+    "co": "^4.6.0",
+    "debug": "^2.3.0",
+    "is-type-of": "^1.0.0",
     "lodash": "^4.16.2",
     "log4js": "^0.6.38",
-    "sdk-base": "^2.0.1"
+    "sdk-base": "^2.0.1",
+    "socket-messenger": "~0.0.3",
+    "uuid": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^3.6.1",
     "eslint-config-airbnb-base": "^5.0.3",
-    "eslint-plugin-import": "^1.16.0"
+    "eslint-plugin-import": "^1.16.0",
+    "babel-cli": "^6.18.0",
+    "babel-preset-env": "0.0.6",
+    "babel-register": "^6.18.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel src -d lib",
+    "watch": "./node_modules/.bin/babel src -w --out-dir lib",
+    "example": "DEBUG=cluster:* node example/dispatch.js"
   },
   "repository": {
     "type": "git",
