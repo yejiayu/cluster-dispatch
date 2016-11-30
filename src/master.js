@@ -17,6 +17,7 @@ class Master extends SDKBase {
     baseDir = process.cwd(),
     appWorkerCount = os.cpus().length,
     logging = logger(appName || 'cluster').debug,
+    needLibrary = true,
   }) {
     super();
     assert(appName, 'options.appName required');
@@ -25,6 +26,7 @@ class Master extends SDKBase {
     this.baseDir = baseDir;
     this.appWorkerCount = appWorkerCount;
     this.logging = logging;
+    this.needLibrary = needLibrary;
 
     this.sockPath = path.join(os.tmpdir(), 'midway.sock');
     this.appCluster = null;
@@ -33,23 +35,41 @@ class Master extends SDKBase {
   }
 
   * init() {
-    const { baseDir, appWorkerCount, logging, sockPath } = this;
+    const { needLibrary } = this;
 
     yield this.messenger.init();
     this.messenger.on('error', error => this.emit('error', error));
+
+    if (needLibrary) {
+      const library = this.startLibrary();
+      library.ready(() => {
+        const appCluster = this.startApp();
+        this.appCluster = appCluster;
+      });
+    } else {
+      const appCluster = this.startApp();
+      this.appCluster = appCluster;
+    }
+  }
+
+  startApp() {
+    const { baseDir, appWorkerCount, logging, sockPath } = this;
+
+    const appCluster = new AppWorker({ baseDir, appWorkerCount, logging, sockPath });
+    appCluster.init();
+    appCluster.on('error', error => this.emit('error', error));
+
+    return appCluster;
+  }
+
+  startLibrary() {
+    const { baseDir, logging, sockPath } = this;
 
     const library = new LibraryWorker({ baseDir, logging, sockPath });
     library.init();
     library.on('error', error => this.emit('error', error));
 
-    library.ready(() => {
-      const appCluster = new AppWorker({ baseDir, appWorkerCount, logging, sockPath });
-      appCluster.init();
-      appCluster.on('error', error => this.emit('error', error));
-
-      this.library = library;
-      this.appCluster = appCluster;
-    });
+    return library;
   }
 }
 

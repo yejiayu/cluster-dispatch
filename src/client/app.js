@@ -13,10 +13,15 @@ class App extends Base {
 
   * init() {
     const { logging } = this;
-    const agent = new Agent({ logging });
+    const { NEED_LIBRARY } = process.env;
 
-    yield agent.init();
-    this.agent = agent;
+    logging(NEED_LIBRARY);
+    if (NEED_LIBRARY) {
+      const agent = new Agent({ logging });
+
+      yield agent.init();
+      this.agent = agent;
+    }
 
     this.ready(true);
   }
