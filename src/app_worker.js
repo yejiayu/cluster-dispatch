@@ -21,7 +21,7 @@ class AppWorker extends SDKBase {
   }
 
   init() {
-    const { workerFile, workerCount, logging, sockPath } = this;
+    const { workerFile, workerCount, logging, sockPath, needLibrary } = this;
     if (!cluster.isMaster) {
       return;
     }
@@ -31,6 +31,7 @@ class AppWorker extends SDKBase {
       cluster.fork({
         ROLE: ROLE.APP,
         SOCK_PATH: sockPath,
+        NEED_LIBRARY: needLibrary,
       });
     });
 
