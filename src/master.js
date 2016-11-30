@@ -53,9 +53,15 @@ class Master extends SDKBase {
   }
 
   startApp() {
-    const { baseDir, appWorkerCount, logging, sockPath } = this;
+    const { baseDir, appWorkerCount, logging, sockPath, needLibrary } = this;
 
-    const appCluster = new AppWorker({ baseDir, appWorkerCount, logging, sockPath });
+    const appCluster = new AppWorker({
+      baseDir,
+      appWorkerCount,
+      logging,
+      sockPath,
+      needLibrary,
+    });
     appCluster.init();
     appCluster.on('error', error => this.emit('error', error));
 

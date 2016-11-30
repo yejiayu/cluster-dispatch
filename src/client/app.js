@@ -15,8 +15,7 @@ class App extends Base {
     const { logging } = this;
     const { NEED_LIBRARY } = process.env;
 
-    logging(NEED_LIBRARY);
-    if (NEED_LIBRARY) {
+    if (NEED_LIBRARY === 'true') {
       const agent = new Agent({ logging });
 
       yield agent.init();

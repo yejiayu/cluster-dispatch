@@ -8,12 +8,13 @@ const ROLE = require('./constant/role');
 const util = require('./util');
 
 class AppWorker extends SDKBase {
-  constructor({ baseDir, appWorkerCount, logging, sockPath }) {
+  constructor({ baseDir, appWorkerCount, logging, sockPath, needLibrary }) {
     super();
     this.workerFile = `${baseDir}/index.js`;
     this.workerCount = appWorkerCount;
     this.logging = logging;
     this.sockPath = sockPath;
+    this.needLibrary = needLibrary;
 
     assert(util.exists(this.workerFile), `app worker 目录 ${this.workerFile} 不存在或不是一个文件`);
 
