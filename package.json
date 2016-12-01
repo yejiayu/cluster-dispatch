@@ -19,7 +19,7 @@
     "lodash": "^4.16.2",
     "log4js": "^0.6.38",
     "sdk-base": "^2.0.1",
-    "socket-messenger": "~0.0.3",
+    "socket-messenger": "~0.0.4",
     "uuid": "^3.0.0"
   },
   "devDependencies": {
