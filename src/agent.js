@@ -6,14 +6,12 @@ const uuid = require('uuid');
 const is = require('is-type-of');
 const co = require('co');
 
-const ENV_ROLE = process.env.ROLE;
-const SOCK_PATH = process.env.SOCK_PATH;
-const name = `${ENV_ROLE}@${process.pid}`;
-
 class LibEvent extends EventEmitter {}
 
+const SOCK_PATH = process.env.SOCK_PATH;
+
 class Agent {
-  constructor({ logging } = {}) {
+  constructor({ logging, name } = {}) {
     this.logging = logging;
     this.mailBox = new MailBox({ name, sockPath: SOCK_PATH });
     this.eventMap = new Map();
