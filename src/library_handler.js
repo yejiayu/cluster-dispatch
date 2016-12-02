@@ -35,11 +35,10 @@ class Handler extends EventEmitter {
           that.emit('lib-event', { eventName, to, args: Array.from(rest) });
         };
         method.apply(lib[objName], args);
-        return;
+      } else {
+        const result = yield method.apply(lib[objName], args);
+        mail.reply(result);
       }
-
-      const result = yield method.apply(lib[objName], args);
-      mail.reply(result);
     }).catch(logging);
   }
 }
