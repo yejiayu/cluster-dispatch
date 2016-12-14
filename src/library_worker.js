@@ -4,6 +4,7 @@ const cp = require('child_process');
 const assert = require('assert');
 
 const SDKBase = require('sdk-base');
+const { merger } = require('lodash');
 
 const ROLE = require('./constant/role');
 const util = require('./util');
@@ -27,12 +28,11 @@ class LibraryWorker extends SDKBase {
   fork() {
     const { workerFile, logging, sockPath } = this;
 
-    const worker = cp.fork(workerFile, {
-      env: {
-        ROLE: ROLE.LIBRARY,
-        SOCK_PATH: sockPath,
-      },
+    const env = merger(process.env, {
+      ROLE: ROLE.LIBRARY,
+      SOCK_PATH: sockPath,
     });
+    const worker = cp.fork(workerFile, { env });
 
     worker.on('message', message => {
       if (message && message.ready) {
