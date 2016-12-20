@@ -11,8 +11,5 @@ typings
 temp
 
 npm-debug.log
-
-./lib
-
+example
 coverage
-.tern-project
