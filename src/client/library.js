@@ -25,6 +25,7 @@ class Library extends Base {
     process.send({ ready: true });
 
     const handler = new Handler({ lib, logging });
+    yield handler.init();
 
     handler.on('lib-event', (params) => {
       const eventName = params.eventName;

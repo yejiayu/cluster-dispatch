@@ -2,29 +2,34 @@
 
 const co = require('co');
 const EventEmitter = require('events');
-
-const { parseAgents } = require('./util');
+const is = require('is-type-of');
 
 class Handler extends EventEmitter {
   constructor({ logging, lib } = {}) {
     super();
 
     this.lib = lib;
-    this.agentLib = parseAgents(lib);
+    this.parsedLib = null;
     this.logging = logging;
   }
 
+  * init() {
+    const { lib } = this;
+    this.parsedLib = yield parseLib(lib);
+    this.libSignature = getLibSignature(this.parsedLib);
+  }
+
   getAgents(mail) {
-    mail.reply(this.agentLib);
+    mail.reply(this.libSignature);
   }
 
   invokeLibrary(mail, invokeParams) {
     if (!invokeParams) {
       return;
     }
-    const { lib } = this;
+    const { parsedLib } = this;
     const { objName, methodName, args, isEvent, logging } = invokeParams;
-    const method = lib[objName][methodName];
+    const method = parsedLib[objName][methodName];
     const that = this;
 
     co(function* gen() {
@@ -34,14 +39,82 @@ class Handler extends EventEmitter {
         args[args.length - 1] = function fn(...rest) {
           that.emit('lib-event', { eventName, to, args: Array.from(rest) });
         };
-        method.apply(lib[objName], args);
+        method(...args);
       } else {
-        const result = yield method.apply(lib[objName], args);
+        let result = null;
+        if (is.promise(method)) {
+          result = yield method(...args);
+        } else {
+          result = method(...args);
+
+          result = is.generator(result)
+              ? yield result
+              : result;
+        }
+
         mail.reply(result);
       }
     }).catch(logging);
   }
 }
 
-
 module.exports = Handler;
+
+function parseLib(library) {
+  return function* () {
+    const result = {};
+    for (const key of Object.keys(library)) {
+      let lib = library[key];
+
+      if (is.promise(lib)) {
+        lib = yield lib;
+      } else if (is.function(lib)) {
+        const gen = lib();
+        lib = is.generator(gen) ? yield lib : lib;
+      }
+      result[key] = lib;
+    }
+
+    return result;
+  };
+}
+
+function getLibSignature(lib) {
+  const result = {};
+  for (const key of Object.keys(lib)) {
+    result[key] = getMethodByProto(lib[key]);
+  }
+
+  return result;
+}
+
+function getMethodByProto(obj) {
+  const result = {};
+
+  if (obj instanceof EventEmitter) {
+    const eventMethods = Object.getOwnPropertyNames(EventEmitter.prototype);
+    for (const methodKey of eventMethods) {
+      result[methodKey] = { type: typeof EventEmitter[methodKey], from: 'super' };
+    }
+  }
+
+  const prototypeKeys = Object.getOwnPropertyNames(obj.constructor.prototype);
+  for (const prototypeKey of prototypeKeys) {
+    if (!prototypeKey.startsWith('_')) {
+      const type = typeof obj[prototypeKey];
+
+      result[prototypeKey] = { type, from: 'prototype' };
+    }
+  }
+
+  const fieldKeys = Object.getOwnPropertyNames(obj);
+  for (const fieldKey of fieldKeys) {
+    if (!fieldKey.startsWith('_')) {
+      const type = typeof obj[fieldKey];
+
+      result[fieldKey] = { type, from: 'field' };
+    }
+  }
+
+  return result;
+}
