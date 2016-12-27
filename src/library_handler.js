@@ -39,17 +39,18 @@ class Handler extends EventEmitter {
         args[args.length - 1] = function fn(...rest) {
           that.emit('lib-event', { eventName, to, args: Array.from(rest) });
         };
-        method(...args);
+        method.apply(parsedLib[objName], args);
       } else {
         let result = null;
-        if (is.promise(method)) {
-          result = yield method(...args);
-        } else {
-          result = method(...args);
 
-          result = is.generator(result)
-              ? yield result
-              : result;
+        if (is.promise(method)) {
+          result = yield method.apply(parsedLib[objName], args);
+        } else {
+          result = method.apply(parsedLib[objName], args);
+
+          if (is.generator(result) || is.promise(result)) {
+            result = yield result;
+          }
         }
 
         mail.reply(result);
