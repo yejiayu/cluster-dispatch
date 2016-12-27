@@ -11,30 +11,31 @@
     "registry": "http://registry.npm.alibaba-inc.com"
   },
   "dependencies": {
-    "@ali/ams-logger": "^2.3.0",
     "cfork": "^1.5.1",
     "co": "^4.6.0",
     "debug": "^2.3.0",
     "is-type-of": "^1.0.0",
     "lodash": "^4.16.2",
-    "log4js": "^0.6.38",
+    "osenv": "^0.1.4",
     "sdk-base": "^2.0.1",
     "socket-messenger": "^0.1.0",
     "uuid": "^3.0.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-env": "0.0.6",
+    "babel-register": "^6.18.0",
+    "debug": "^2.3.3",
     "eslint": "^3.6.1",
     "eslint-config-airbnb-base": "^5.0.3",
     "eslint-plugin-import": "^1.16.0",
-    "babel-cli": "^6.18.0",
-    "babel-preset-env": "0.0.6",
-    "babel-register": "^6.18.0"
+    "koa": "^1.2.4"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/babel src -d lib",
     "watch": "./node_modules/.bin/babel src -w --out-dir lib",
-    "example": "DEBUG=cluster:* node example/dispatch.js",
+    "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js",
     "publish-tnpm": "npm run build && tnpm publish"
   },
   "repository": {
