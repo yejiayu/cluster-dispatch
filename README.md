@@ -1,5 +1,4 @@
 # cluster-dispatch
-多进程管理
 > 解决Node.js在Cluster模式下的连接/资源复用问题
 
 [![NPM version][npm-image]][npm-url]
