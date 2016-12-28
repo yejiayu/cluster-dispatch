@@ -3,7 +3,6 @@
 const os = require('os');
 const path = require('path');
 
-const osenv = require('osenv');
 const Messenger = require('socket-messenger').Messenger;
 const SDKBase = require('sdk-base');
 
