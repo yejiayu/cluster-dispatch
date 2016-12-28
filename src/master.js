@@ -38,7 +38,12 @@ class Master extends SDKBase {
     this.logging = logging;
     this.needLibrary = needLibrary;
 
-    this.sockPath = path.join(os.tmpdir(), 'midway.sock');
+    if (process.platform === 'win32') {
+      this.sockPath = '\\\\.\\pipe\\pipe-midway';
+    } else {
+      this.sockPath = path.join(__dirname, '../midway.sock');
+    }
+
     this.appCluster = null;
     this.library = null;
     this.messenger = new Messenger({ sockPath: this.sockPath });
