@@ -4,10 +4,14 @@
   "description": "node多进程管理",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node_modules/.bin/egg-bin test",
+    "cov": "node_modules/.bin/egg-bin cov",
+    "lint": "node_modules/.bin/egg-bin src test",
+    "ci": "npm run lint && npm run cov",
     "build": "./node_modules/.bin/babel src -d lib",
     "watch": "./node_modules/.bin/babel src -w --out-dir lib",
-    "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js"
+    "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js",
+    "publish-tnpm": "npm run build && tnpm publish"
   },
   "author": {
     "name": "叶嘉雨",

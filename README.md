@@ -49,5 +49,5 @@ $ git clone
 
 $ npm i
 
-$ npm run example // 请在node7以下版本运行
+$ npm run example
 ````
