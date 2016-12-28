@@ -8,7 +8,7 @@ const ROLE = require('./constant/role');
 const util = require('./util');
 
 class AppWorker extends SDKBase {
-  constructor({ baseDir, appWorkerCount, logging, sockPath, needLibrary }) {
+  constructor({ baseDir, appWorkerCount, logging, sockPath, needLibrary } = {}) {
     super();
     this.workerFile = `${baseDir}/index.js`;
     this.workerCount = appWorkerCount;
