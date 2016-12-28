@@ -10,7 +10,7 @@ const ROLE = require('./constant/role');
 const util = require('./util');
 
 class LibraryWorker extends SDKBase {
-  constructor({ baseDir, logging, sockPath }) {
+  constructor({ baseDir, logging, sockPath } = {}) {
     super();
     this.workerFile = `${baseDir}/library/index.js`;
     this.logging = logging;
@@ -50,6 +50,8 @@ class LibraryWorker extends SDKBase {
       if (process.env.NODE_ENV === 'production') {
         this.fork();
       }
+
+      // worker.exit();
     });
 
     this.worker = worker;
