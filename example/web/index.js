@@ -12,7 +12,11 @@ app.use(function* helloWorld() {
   const userName = yield agent.demoLib.getUserName();
   debug(userName);
 
-  this.body = userName;
+  const rpDemo = yield agent.rpDemo.getRpDemo();
+  // debug(userName);
+  debug(rpDemo);
+
+  this.body = 'hello world';
 });
 
 app.listen(8000, () => debug('open http://localhost:8000'));
