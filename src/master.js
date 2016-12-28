@@ -3,6 +3,7 @@
 const os = require('os');
 const path = require('path');
 
+const osenv = require('osenv');
 const Messenger = require('socket-messenger').Messenger;
 const SDKBase = require('sdk-base');
 
@@ -29,7 +30,7 @@ class Master extends SDKBase {
     appWorkerCount = os.cpus().length,
     logging = console.log,
     needLibrary = true,
-  }) {
+  } = {}) {
     super();
     this.baseDir = baseDir;
     this.appPath = appPath;
@@ -61,7 +62,6 @@ class Master extends SDKBase {
   }
 
   startApp() {
-    console.log('start app');
     const { baseDir, appPath, appWorkerCount, logging, sockPath, needLibrary } = this;
 
     const appCluster = new AppWorker({
@@ -75,6 +75,7 @@ class Master extends SDKBase {
     appCluster.init();
     appCluster.on('error', error => this.emit('error', error));
 
+    logging('start app');
     return appCluster;
   }
 

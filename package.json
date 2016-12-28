@@ -3,12 +3,6 @@
   "version": "1.1.0",
   "description": "node多进程管理",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/babel src -d lib",
-    "watch": "./node_modules/.bin/babel src -w --out-dir lib",
-    "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js"
-  },
   "author": {
     "name": "叶嘉雨",
     "email": "yejiayu.fe@gmail.com"
@@ -19,6 +13,7 @@
     "debug": "^2.3.0",
     "is-type-of": "^1.0.0",
     "lodash": "^4.16.2",
+    "osenv": "^0.1.4",
     "sdk-base": "^2.0.1",
     "socket-messenger": "^0.1.0",
     "uuid": "^3.0.0"
@@ -33,9 +28,12 @@
     "eslint-plugin-import": "^1.16.0",
     "koa": "^1.2.4"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yejiayu/dispatch.git"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel src -d lib",
+    "watch": "./node_modules/.bin/babel src -w --out-dir lib",
+    "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js",
+    "publish-npm": "npm run build && npm publish"
   },
   "license": "ISC"
 }
