@@ -16,6 +16,9 @@ class AppWorker extends SDKBase {
     this.sockPath = sockPath;
     this.needLibrary = needLibrary;
 
+    // 统计所有的worker是否都已经ready
+    this._readyCount = 0;
+
     assert(util.exists(this.workerFile), `app worker 目录 ${this.workerFile} 不存在或不是一个文件`);
 
     this.workerMap = new Map();
@@ -39,6 +42,8 @@ class AppWorker extends SDKBase {
     cluster.on('fork', worker => {
       this.workerMap.set(worker.process.pid, worker);
 
+      worker.on('message', message => this._onReady(message));
+
       logging('app worker fork pid=%s', worker.process.pid);
     });
 
@@ -51,11 +56,20 @@ class AppWorker extends SDKBase {
     cluster.on('exit', (worker, code, signal) => {
       this.workerMap.delete(worker.process.pid);
       worker.removeAllListeners();
+      this._readyCount -= 1;
 
       logging('app worker exit pid=%s code=%s signal=%s', worker.process.pid, code, signal);
     });
+  }
 
-    this.ready(true);
+  _onReady(message) {
+    if (message && message.ready) {
+      this._readyCount += 1;
+
+      if (this._readyCount === this.workerCount) {
+        this.ready(true);
+      }
+    }
   }
 }
 

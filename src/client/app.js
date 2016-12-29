@@ -25,6 +25,7 @@ class App extends Base {
       this.agent = agent;
     }
 
+    process.send({ ready: true });
     this.ready(true);
   }
 }

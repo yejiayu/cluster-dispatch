@@ -57,12 +57,12 @@ class Master extends SDKBase {
 
     // 应对不需要启动library进程的情况
     if (needLibrary) {
-      const library = this.startLibrary();
-      yield ready(library);
+      this.library = this.startLibrary();
+      yield ready(this.library);
     }
 
-    const appCluster = this.startApp();
-    this.appCluster = appCluster;
+    this.appCluster = this.startApp();
+    yield ready(this.appCluster);
   }
 
   startApp() {
@@ -91,6 +91,10 @@ class Master extends SDKBase {
     library.on('error', error => this.emit('error', error));
 
     return library;
+  }
+
+  exit(code = 0) {
+    process.exit(code);
   }
 }
 
