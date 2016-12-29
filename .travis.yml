@@ -1,0 +1,17 @@
+
+sudo: required
+dist: trusty
+
+language: node_js
+
+node_js:
+  - "4"
+  - "6"
+
+branches:
+  only:
+  - master
+
+bbefore_script:
+  - npm install -g egg-bin
+script: egg-bin
