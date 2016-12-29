@@ -4,9 +4,9 @@
   "description": "解决Node.js在Cluster模式下的连接/资源复用问题",
   "main": "index.js",
   "scripts": {
-    "test": "npm run cov",
+    "test": "npm run build && npm run cov",
     "cov": "egg-bin cov",
-    "unit": "DEBUG=cluster-dispatch:* egg-bin test",
+    "unit": "npm run build && DEBUG=cluster-dispatch:* egg-bin test",
     "build": "./node_modules/.bin/babel src -d lib",
     "watch": "./node_modules/.bin/babel src -w --out-dir lib",
     "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js",
