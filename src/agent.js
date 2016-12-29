@@ -1,25 +1,20 @@
 'use strict';
 
 const EventEmitter = require('events');
-const MailBox = require('socket-messenger').MailBox;
 const uuid = require('uuid');
 const is = require('is-type-of');
 const co = require('co');
 
 class LibEvent extends EventEmitter {}
 
-const SOCK_PATH = process.env.SOCK_PATH;
-
 class Agent {
-  constructor({ logging, name } = {}) {
+  constructor({ logging, mailBox } = {}) {
     this.logging = logging;
-    this.mailBox = new MailBox({ name, sockPath: SOCK_PATH });
+    this.mailBox = mailBox;
     this.eventMap = new Map();
   }
 
   * init() {
-    yield this.mailBox.init();
-
     this.mailBox.on('mail', mail => this.mailHandler(mail));
 
     const reply = yield this.mailBox.write()
@@ -55,6 +50,8 @@ class Agent {
       data: { objName, methodName, args },
     };
 
+    // 这里判断最后一个参数是不是function,
+    // 如果是function就默认为监听了一个事件
     if (args.length > 0 && is.function(args[args.length - 1])) {
       const eventName = uuid();
       const callback = args[args.length - 1];
