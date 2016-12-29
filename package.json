@@ -34,7 +34,9 @@
     "eslint": "^3.6.1",
     "eslint-config-airbnb-base": "^5.0.3",
     "eslint-plugin-import": "^1.16.0",
-    "koa": "^1.2.4"
+    "koa": "^1.2.4",
+    "mm": "^2.0.0",
+    "power-assert": "^1.4.2"
   },
   "repository": {
     "type": "git",
