@@ -14,18 +14,16 @@ class App extends Base {
     super();
     this.logging = logging;
     this.mailBox = new MailBox({ name, sockPath: SOCK_PATH });
-    this.agent = null;
+    this.agent = new Agent({ logging, mailBox: this.mailBox });
   }
 
   * init() {
-    const { logging, mailBox } = this;
+    const { mailBox, agent } = this;
     const { NEED_LIBRARY } = process.env;
 
     yield mailBox.init();
 
     if (NEED_LIBRARY === 'true') {
-      const agent = new Agent({ logging, mailBox });
-
       yield agent.init();
       this.agent = agent;
     }
