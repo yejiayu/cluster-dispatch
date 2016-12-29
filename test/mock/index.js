@@ -6,7 +6,7 @@ const co = require('co');
 const AppClient = require('../../').AppClient;
 const common = require('./common');
 
-co(function* gen() {
+module.exports = co(function* gen() {
   const appClient = new AppClient({ logging: debug });
   yield appClient.init();
   appClient.on('error', debug);
