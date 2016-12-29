@@ -12,6 +12,4 @@ co(function* gen() {
   appClient.on('error', debug);
   // 可以从app client中拿到agent, 推荐存储到common中
   common.agent = appClient.agent;
-
-  require('./web');
 }).catch(debug);

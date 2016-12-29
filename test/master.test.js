@@ -3,7 +3,7 @@
 const path = require('path');
 const debug = require('debug')('cluster-dispatch:test:master');
 
-const Master = require('../src/master');
+const Master = require('../').Master;
 
 describe('test/master.test.js', () => {
   it('init()', function* () {
