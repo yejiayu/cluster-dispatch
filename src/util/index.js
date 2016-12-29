@@ -17,11 +17,6 @@ const util = {
       return false;
     }
   },
-
-  generateRequestId(prefix, NO) {
-    return `${prefix}#${NO}`;
-  },
-
 };
 
 module.exports = util;
