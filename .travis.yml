@@ -17,4 +17,5 @@ before_script:
   - npm install -g coveralls
 
 after_script:
+  - nvm use 6
   - npm run coverage

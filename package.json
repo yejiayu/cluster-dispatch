@@ -4,10 +4,9 @@
   "description": "解决Node.js在Cluster模式下的连接/资源复用问题",
   "main": "index.js",
   "scripts": {
-    "test": "npm run build && npm run cov",
-    "coverage": "cat ./coverage/lcov.info | coveralls",
-    "cov": "egg-bin cov",
-    "unit": "npm run build && DEBUG=cluster-dispatch:* egg-bin test",
+    "test": "npm run build && DEBUG=cluster-dispatch:* egg-bin test",
+    "coverage": "npm run cov && cat ./coverage/lcov.info | coveralls",
+    "cov": "npm run build && egg-bin cov",
     "build": "./node_modules/.bin/babel src -d lib",
     "watch": "./node_modules/.bin/babel src -w --out-dir lib",
     "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js",
