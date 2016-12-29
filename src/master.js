@@ -94,10 +94,6 @@ class Master extends SDKBase {
 
     return library;
   }
-
-  exit(code = 0) {
-    process.exit(code);
-  }
 }
 
 module.exports = Master;

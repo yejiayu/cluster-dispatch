@@ -50,8 +50,6 @@ class LibraryWorker extends SDKBase {
       if (process.env.NODE_ENV === 'production') {
         this.fork();
       }
-
-      // worker.exit();
     });
 
     this.worker = worker;
