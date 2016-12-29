@@ -63,6 +63,8 @@ class Master extends SDKBase {
 
     this.appCluster = this.startApp();
     yield ready(this.appCluster);
+
+    this.ready(true);
   }
 
   startApp() {
