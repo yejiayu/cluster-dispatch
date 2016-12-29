@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run build && npm run cov",
+    "coverage": "cat ./coverage/lcov.info | coveralls",
     "cov": "egg-bin cov",
     "unit": "npm run build && DEBUG=cluster-dispatch:* egg-bin test",
     "build": "./node_modules/.bin/babel src -d lib",
