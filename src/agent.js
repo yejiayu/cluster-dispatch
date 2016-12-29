@@ -19,7 +19,6 @@ class Agent {
 
   * init() {
     yield this.mailBox.init();
-    process.send({ ready: true });
 
     this.mailBox.on('mail', mail => this.mailHandler(mail));
 
