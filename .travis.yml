@@ -14,4 +14,3 @@ branches:
 
 before_script:
   - npm install -g egg-bin
-script: egg-bin
