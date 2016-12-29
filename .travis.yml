@@ -12,6 +12,6 @@ branches:
   only:
   - master
 
-bbefore_script:
+before_script:
   - npm install -g egg-bin
 script: egg-bin
