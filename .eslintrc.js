@@ -3,6 +3,7 @@ module.exports = {
   'rules': {
     "import/no-extraneous-dependencies": ["error", {"devDependencies": true, "optionalDependencies": false, "peerDependencies": false}],
     'strict': [2, 'global'],
+    'no-underscore-dangle': ["error", { "allowAfterThis": true }],
     'no-use-before-define': ["error", { "functions": false, "classes": true }],
     'no-param-reassign': [0],
   },
