@@ -16,51 +16,58 @@ class Library extends Base {
 
     this.lib = lib;
     this.logging = logging;
+    this.mailBox = new MailBox({ name, sockPath: SOCK_PATH });
+    this.handler = new Handler({ lib, logging });
   }
 
   * init() {
-    const { lib, logging } = this;
-    const mailBox = new MailBox({ name, sockPath: SOCK_PATH });
+    const { mailBox, handler } = this;
+
     yield mailBox.init();
     process.send({ ready: true });
 
-    const handler = new Handler({ lib, logging });
     yield handler.init();
 
-    handler.on('lib-event', (params) => {
-      const eventName = params.eventName;
-      const to = params.to;
-      const args = params.args;
+    handler.on('lib-event', params => this._onLibEventHandler(params));
 
-      mailBox.write().setTo(to)
-          .setMessage({
-            action: 'lib-event',
-            eventName,
-            args,
-          })
-          .send({ duplex: false });
-    });
-
-    mailBox.on('mail', mail => {
-      const message = mail.message;
-      const action = message.action;
-      const data = message.data;
-
-      switch (action) {
-        case 'invokeLibrary':
-          handler.invokeLibrary(mail, data);
-          break;
-
-        case 'getAgents':
-          handler.getAgents(mail);
-          break;
-
-        default:
-          mail.reply('');
-      }
-    });
+    mailBox.on('mail', mail => this._onMailHandler(mail));
 
     this.ready(true);
+  }
+
+  _onLibEventHandler(params) {
+    const { mailBox } = this;
+    const eventName = params.eventName;
+    const to = params.to;
+    const args = params.args;
+
+    mailBox.write().setTo(to)
+        .setMessage({
+          action: 'lib-event',
+          eventName,
+          args,
+        })
+        .send({ duplex: false });
+  }
+
+  _onMailHandler(mail) {
+    const { handler } = this;
+    const message = mail.message;
+    const action = message.action;
+    const data = message.data;
+
+    switch (action) {
+      case 'invokeLibrary':
+        handler.invokeLibrary(mail, data);
+        break;
+
+      case 'getAgents':
+        handler.getAgents(mail);
+        break;
+
+      default:
+        mail.reply('');
+    }
   }
 }
 
