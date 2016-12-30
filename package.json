@@ -10,7 +10,7 @@
     "build": "./node_modules/.bin/babel src -d lib",
     "watch": "./node_modules/.bin/babel src -w --out-dir lib",
     "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js",
-    "publish-tnpm": "npm run build && tnpm publish"
+    "publish-npm": "npm run build && npm publish"
   },
   "author": {
     "name": "叶嘉雨",
