@@ -1,5 +1,6 @@
 'use strict';
 
+const assert = require('assert');
 const debug = require('debug')('cluster-dispatch:test:library_handler');
 const EventEmitter = require('events');
 const _ = require('lodash');
@@ -35,7 +36,8 @@ describe('test/library_handler.test.js', () => {
 
       mail.from = 'test';
       mail.on('reply', data => {
-        debug(data);
+        const [message] = data;
+        assert.equal(message.name, 'yejiayu');
       });
 
       handler.invokeLibrary(mail, {
@@ -55,11 +57,59 @@ describe('test/library_handler.test.js', () => {
       const mail = new Mail();
 
       mail.from = 'test';
+      handler.on('lib-event', ({ eventName }) => {
+        assert.equal(eventName, 'test-emit');
+      });
+      handler.invokeLibrary(mail, {
+        objName: 'event',
+        methodName: 'getTest',
+        args: [() => {}],
+        isEvent: true,
+        eventName: 'test-emit',
+      });
+    });
+
+    it('invoke promise', function* () {
+      const handler = new Handler({
+        logging: debug,
+        lib,
+      });
+      yield handler.init();
+      const mail = new Mail();
+
+      mail.from = 'test';
+      mail.on('reply', data => {
+        const [message] = data;
+        assert.equal(message.name, 'yejiayu');
+      });
+
       handler.invokeLibrary(mail, {
         objName: 'demoLib',
-        methodName: 'getUserName',
+        methodName: 'getUserNameByPromise',
         args: [],
-        isEvent: true,
+        isEvent: false,
+      });
+    });
+
+    it('invoke gen', function* () {
+      const handler = new Handler({
+        logging: debug,
+        lib,
+      });
+      yield handler.init();
+      const mail = new Mail();
+
+      mail.from = 'test';
+      mail.on('reply', data => {
+        const [message] = data;
+        assert.equal(message.name, 'yejiayu');
+      });
+
+      handler.invokeLibrary(mail, {
+        objName: 'demoLib',
+        methodName: 'getUserNameByGen',
+        args: [],
+        isEvent: false,
       });
     });
   });
