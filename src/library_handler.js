@@ -41,16 +41,10 @@ class Handler extends EventEmitter {
         };
         method.apply(parsedLib[objName], args);
       } else {
-        let result = null;
+        let result = method.apply(parsedLib[objName], args);
 
-        if (is.promise(method)) {
+        if (is.generator(result) || is.promise(result)) {
           result = yield method.apply(parsedLib[objName], args);
-        } else {
-          result = method.apply(parsedLib[objName], args);
-
-          if (is.generator(result) || is.promise(result)) {
-            result = yield result;
-          }
         }
 
         mail.reply(result);
@@ -67,11 +61,11 @@ function parseLib(library) {
     for (const key of Object.keys(library)) {
       let lib = library[key];
 
-      if (is.promise(lib)) {
-        lib = yield lib;
-      } else if (is.function(lib)) {
-        const gen = lib();
-        lib = is.generator(gen) ? yield lib : lib;
+      if (is.function(lib)) {
+        const genOrPromise = lib();
+        lib = is.generator(genOrPromise) || is.promise(genOrPromise)
+            ? yield lib
+            : lib;
       }
       result[key] = lib;
     }
