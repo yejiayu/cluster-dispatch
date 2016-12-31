@@ -17,14 +17,14 @@ class App extends Base {
     this.agent = new Agent({ logging, mailBox: this.mailBox });
   }
 
-  * init() {
+  async init() {
     const { mailBox, agent } = this;
     const { NEED_LIBRARY } = process.env;
 
-    yield mailBox.init();
+    await mailBox.init();
 
     if (NEED_LIBRARY === 'true') {
-      yield agent.init();
+      await agent.init();
       this.agent = agent;
     }
 

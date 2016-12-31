@@ -20,13 +20,13 @@ class Library extends Base {
     this.handler = new Handler({ lib, logging });
   }
 
-  * init() {
+  async init() {
     const { mailBox, handler } = this;
 
-    yield mailBox.init();
+    await mailBox.init();
     process.send({ ready: true });
 
-    yield handler.init();
+    await handler.init();
 
     handler.on('lib-event', params => this._onLibEventHandler(params));
 

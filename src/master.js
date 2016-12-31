@@ -1,5 +1,6 @@
 'use strict';
 
+const co = require('co');
 const os = require('os');
 const path = require('path');
 
@@ -49,20 +50,20 @@ class Master extends SDKBase {
     this.messenger = new Messenger({ sockPath: this.sockPath });
   }
 
-  * init() {
-    const { needLibrary } = this;
+  async init() {
+    const { needLibrary, messenger } = this;
 
-    yield this.messenger.init();
-    this.messenger.on('error', error => this.emit('error', error));
+    await co.wrap(messenger.init).apply(messenger);
+    messenger.on('error', error => this.emit('error', error));
 
     // 应对不需要启动library进程的情况
     if (needLibrary) {
       this.library = this.startLibrary();
-      yield ready(this.library);
+      await ready(this.library);
     }
 
     this.appCluster = this.startApp();
-    yield ready(this.appCluster);
+    await ready(this.appCluster);
 
     this.ready(true);
   }

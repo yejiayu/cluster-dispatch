@@ -3,7 +3,6 @@
 const EventEmitter = require('events');
 const uuid = require('uuid');
 const is = require('is-type-of');
-const co = require('co');
 
 class LibEvent extends EventEmitter {}
 
@@ -14,10 +13,10 @@ class Agent {
     this.eventMap = new Map();
   }
 
-  * init() {
+  async init() {
     this.mailBox.on('mail', mail => this.mailHandler(mail));
 
-    const reply = yield this.mailBox.write()
+    const reply = await this.mailBox.write()
         .setTo('LIBRARY')
         .setMessage({ action: 'getAgents' })
         .send();
@@ -66,11 +65,11 @@ class Agent {
       return mail.setMessage(message).send({ duplex: false });
     }
 
-    return co(function* gen() {
-      const reply = yield mail.setMessage(message).send();
+    return (async() => {
+      const reply = await mail.setMessage(message).send();
 
       return reply.message;
-    });
+    })();
   }
 
   mailHandler(mail) {
