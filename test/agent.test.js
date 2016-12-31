@@ -6,8 +6,8 @@ const is = require('is-type-of');
 const _ = require('lodash');
 const debug = require('debug')('cluster-dispatch:test:agent');
 
-const lib = _.cloneDeep(require('./mock/library/lib'));
-const Agent = require('../').Agent;
+const lib = _.cloneDeep(require('./mock/agent/lib'));
+const Agent = require('../').Agent.RawAgent;
 
 let mailBox = null;
 let agent = null;
@@ -59,6 +59,7 @@ describe('test/agent.test.js', () => {
       });
 
       function event(message) {
+        console.log(message);
         assert.equal(message.name, 'yejiayu');
       }
     });

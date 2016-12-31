@@ -6,7 +6,7 @@ const EventEmitter = require('events');
 const _ = require('lodash');
 
 const Handler = require('../lib/library_handler');
-const lib = _.cloneDeep(require('./mock/library/lib'));
+const lib = _.cloneDeep(require('./mock/agent/lib'));
 
 class Mail extends EventEmitter {
   reply() {

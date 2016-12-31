@@ -1,15 +1,16 @@
 'use strict';
 
-const debug = require('debug')('cluster-dispatch:app');
+const debug = require('debug')('cluster-dispatch:test:app');
 const co = require('co');
 
+const web = require('./web');
 const AppClient = require('../../').AppClient;
-const common = require('./common');
 
 module.exports = co(function* gen() {
   const appClient = new AppClient({ logging: debug });
+  yield web.init();
   yield appClient.init();
   appClient.on('error', debug);
-  // 可以从app client中拿到agent, 推荐存储到common中
-  common.agent = appClient.agent;
+
+  web.start();
 }).catch(debug);

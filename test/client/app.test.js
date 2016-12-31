@@ -4,7 +4,7 @@ const mm = require('mm');
 const MailBox = require('socket-messenger').MailBox;
 const debug = require('debug')('cluster-dispatch:test:client:app');
 
-const Agent = require('../../').Agent;
+const Agent = require('../../').Agent.RawAgent;
 const AppClient = require('../../').AppClient;
 
 describe('test/client/app.test.js', () => {
@@ -14,7 +14,7 @@ describe('test/client/app.test.js', () => {
   });
 
   it('need library app ready', function* onReady() {
-    process.env.NEED_LIBRARY = 'true';
+    process.env.NEED_AGENT = 'true';
 
     const appClient = new AppClient({ logging: debug });
     mm(appClient.mailBox, 'init', () => new Promise((resolve) => resolve()));
@@ -26,7 +26,7 @@ describe('test/client/app.test.js', () => {
   });
 
   it('not need library app ready', function* onReady() {
-    process.env.NEED_LIBRARY = 'false';
+    process.env.NEED_AGENT = 'false';
 
     const appClient = new AppClient({ logging: debug });
     mm(appClient.mailBox, 'init', () => new Promise((resolve) => resolve()));

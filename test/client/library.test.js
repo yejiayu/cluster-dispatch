@@ -4,7 +4,7 @@ const mm = require('mm');
 const MailBox = require('socket-messenger').MailBox;
 const debug = require('debug')('cluster-dispatch:test:client:app');
 
-const lib = require('../mock/library/lib');
+const lib = require('../mock/agent/lib');
 const LibraryClient = require('../../').LibraryClient;
 const Handler = require('../../lib/library_handler');
 
@@ -55,14 +55,14 @@ describe('test/client/library.test.js', () => {
         logging: debug,
         lib,
       });
-      mm(libraryClient.handler, 'invokeLibrary', () => {})
-      mm(libraryClient.handler, 'getAgents', () => {})
+      mm(libraryClient.handler, 'invokeLibrary', () => {});
+      mm(libraryClient.handler, 'getAgents', () => {});
 
       libraryClient._onMailHandler({
         message: {
           action: 'invokeLibrary',
           data: '',
-        }
+        },
       });
     });
 
@@ -71,14 +71,14 @@ describe('test/client/library.test.js', () => {
         logging: debug,
         lib,
       });
-      mm(libraryClient.handler, 'invokeLibrary', () => {})
-      mm(libraryClient.handler, 'getAgents', () => {})
+      mm(libraryClient.handler, 'invokeLibrary', () => {});
+      mm(libraryClient.handler, 'getAgents', () => {});
 
       libraryClient._onMailHandler({
         message: {
           action: 'getAgents',
           data: '',
-        }
+        },
       });
     });
   });
