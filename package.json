@@ -12,6 +12,9 @@
     "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js",
     "publish-npm": "npm run build && npm publish"
   },
+  "engines" : {
+    "node" : ">=4.6.1"
+  },
   "author": {
     "name": "叶嘉雨",
     "email": "yejiayu.fe@gmail.com"
