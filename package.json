@@ -12,8 +12,8 @@
     "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js",
     "publish-npm": "npm run build && npm publish"
   },
-  "engines" : {
-    "node" : ">=4.6.1"
+  "engines": {
+    "node": ">=4.6.1"
   },
   "author": {
     "name": "叶嘉雨",
@@ -41,7 +41,9 @@
     "eslint-plugin-import": "^1.16.0",
     "koa": "^1.2.4",
     "mm": "^2.0.0",
-    "power-assert": "^1.4.2"
+    "power-assert": "^1.4.2",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1"
   },
   "repository": {
     "type": "git",
