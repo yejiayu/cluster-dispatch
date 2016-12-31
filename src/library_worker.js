@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const cp = require('child_process');
 const assert = require('assert');
 
@@ -10,13 +11,13 @@ const ROLE = require('./constant/role');
 const util = require('./util');
 
 class LibraryWorker extends SDKBase {
-  constructor({ baseDir, logging, sockPath } = {}) {
+  constructor({ libraryPath, logging, sockPath } = {}) {
     super();
-    this.workerFile = `${baseDir}/library/index.js`;
+    this.libraryPath = libraryPath;
     this.logging = logging;
     this.sockPath = sockPath;
 
-    assert(util.exists(this.workerFile), `library worker 目录 ${this.workerFile} 不存在或不是一个文件`);
+    assert(util.exists(this.libraryPath), `libraryPath ${this.libraryPath} 不存在或不是一个文件`);
 
     this.worker = null;
   }
@@ -26,13 +27,14 @@ class LibraryWorker extends SDKBase {
   }
 
   fork() {
-    const { workerFile, logging, sockPath } = this;
+    const { libraryPath, logging, sockPath } = this;
 
     const env = merge(process.env, {
       ROLE: ROLE.LIBRARY,
+      LIBRARY_PATH: libraryPath,
       SOCK_PATH: sockPath,
     });
-    const worker = cp.fork(workerFile, { env });
+    const worker = cp.fork(path.join(__dirname, './client/fork_library.js'), { env });
 
     worker.on('message', message => {
       if (message && message.ready) {

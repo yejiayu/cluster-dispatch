@@ -60,12 +60,10 @@ async function parseLib(library) {
   for (const key of Object.keys(library)) {
     const lib = await library[key];
 
-    await invokeFieldOrMethod({
+    result[key] = await invokeFieldOrMethod({
       ctx: library,
       attr: lib,
     });
-
-    result[key] = lib;
   }
 
   return result;

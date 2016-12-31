@@ -8,15 +8,15 @@ class LibEvent extends EventEmitter {}
 
 class Agent {
   constructor({ logging, mailBox } = {}) {
-    this.logging = logging;
-    this.mailBox = mailBox;
-    this.eventMap = new Map();
+    this._logging = logging;
+    this._mailBox = mailBox;
+    this._eventMap = new Map();
   }
 
   async init() {
-    this.mailBox.on('mail', mail => this.mailHandler(mail));
+    this._mailBox.on('mail', mail => this.mailHandler(mail));
 
-    const reply = await this.mailBox.write()
+    const reply = await this._mailBox.write()
         .setTo('LIBRARY')
         .setMessage({ action: 'getAgents' })
         .send();
@@ -39,11 +39,11 @@ class Agent {
   }
 
   invoke({ objName, methodName }, ...rest) {
-    const { mailBox, eventMap } = this;
+    const { _mailBox, _eventMap } = this;
 
     const args = Array.from(rest);
 
-    const mail = mailBox.write().setTo('LIBRARY');
+    const mail = _mailBox.write().setTo('LIBRARY');
     const message = {
       action: 'invokeLibrary',
       data: { objName, methodName, args },
@@ -57,7 +57,7 @@ class Agent {
       const libEvent = new LibEvent();
 
       libEvent.on(eventName, callback);
-      eventMap.set(eventName, libEvent);
+      _eventMap.set(eventName, libEvent);
 
       message.data.eventName = eventName;
       message.data.isEvent = true;
@@ -73,23 +73,34 @@ class Agent {
   }
 
   mailHandler(mail) {
-    const { logging } = this;
+    const { _logging } = this;
     const { message } = mail;
     const { action } = message;
 
     switch (action) {
       case 'lib-event': {
         const { eventName, args } = message;
-        const eventLib = this.eventMap.get(eventName);
+        const eventLib = this._eventMap.get(eventName);
 
         eventLib.emit(...[eventName].concat(args));
         break;
       }
 
       default:
-        logging('default');
+        _logging('default');
     }
   }
 }
 
-module.exports = Agent;
+let _agent = null;
+module.exports = {
+  RawAgent: Agent,
+
+  setAgent(agent) {
+    _agent = agent;
+  },
+
+  getAgent() {
+    return _agent;
+  },
+};

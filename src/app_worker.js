@@ -8,13 +8,19 @@ const ROLE = require('./constant/role');
 const util = require('./util');
 
 class AppWorker extends SDKBase {
-  constructor({ baseDir, appWorkerCount, logging, sockPath, needLibrary } = {}) {
+  constructor({
+    baseDir,
+    appWorkerCount,
+    logging,
+    sockPath,
+    needAgent,
+  } = {}) {
     super();
     this.workerFile = `${baseDir}/index.js`;
     this.workerCount = appWorkerCount;
     this.logging = logging;
     this.sockPath = sockPath;
-    this.needLibrary = needLibrary;
+    this.needAgent = needAgent;
 
     // 统计所有的worker是否都已经ready
     this._readyCount = 0;
@@ -25,7 +31,7 @@ class AppWorker extends SDKBase {
   }
 
   init() {
-    const { workerFile, workerCount, logging, sockPath, needLibrary } = this;
+    const { workerFile, workerCount, logging, sockPath, needAgent } = this;
     if (!cluster.isMaster) {
       return;
     }
@@ -35,7 +41,7 @@ class AppWorker extends SDKBase {
       cluster.fork({
         ROLE: ROLE.APP,
         SOCK_PATH: sockPath,
-        NEED_LIBRARY: needLibrary,
+        NEED_AGENT: needAgent,
       });
     });
 

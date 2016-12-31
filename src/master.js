@@ -17,27 +17,34 @@ class Master extends SDKBase {
    * @param {Object} options
    *   - {String} baseDir - 工程根路径
    *   - {String} appPath - app进程入口文件, 可以是一个相对路径
-   *   - {String} libraryPath - app进程入口文件, 可以是一个相对路径
+   *   - {String} libraryPath - 需要代理的库的入口文件, 可以是一个相对路径
    *   - {Number} appWorkerCount - 需要启动的app进程数
    *   - {Funcion} logging - log
    *   - {Boolean} needLibrary - 是否需要启动library进程
+   *   - {Boolean} needAgent - 是否需要自动启动代理
    * @constructor
    */
   constructor({
     baseDir = process.cwd(),
     appPath = 'index.js',
-    libraryPath = 'library/index.js',
+    libraryPath = 'agent/lib/index.js',
     appWorkerCount = os.cpus().length,
     logging = console.log,
     needLibrary = true,
+    needAgent = true,
   } = {}) {
     super();
+    if (!needLibrary && needAgent) {
+      throw new Error('needLibrary为false时 needAgent不允许设为true');
+    }
+
     this.baseDir = baseDir;
-    this.appPath = appPath;
-    this.libraryPath = libraryPath;
+    this.appPath = path.join(baseDir, appPath);
+    this.libraryPath = path.join(baseDir, libraryPath);
     this.appWorkerCount = appWorkerCount;
     this.logging = logging;
     this.needLibrary = needLibrary;
+    this.needAgent = needLibrary;
 
     if (process.platform === 'win32') {
       this.sockPath = '\\\\.\\pipe\\pipe-midway';
@@ -69,27 +76,26 @@ class Master extends SDKBase {
   }
 
   startApp() {
-    const { baseDir, appPath, appWorkerCount, logging, sockPath, needLibrary } = this;
-
     const appCluster = new AppWorker({
-      baseDir,
-      appPath,
-      appWorkerCount,
-      logging,
-      sockPath,
-      needLibrary,
+      baseDir: this.baseDir,
+      appPath: this.appPath,
+      appWorkerCount: this.appWorkerCount,
+      logging: this.logging,
+      sockPath: this.sockPath,
+      needLibrary: this.needLibrary,
+      needAgent: this.needAgent,
     });
     appCluster.init();
     appCluster.on('error', error => this.emit('error', error));
 
-    logging('start app');
+    this.logging('start app');
     return appCluster;
   }
 
   startLibrary() {
-    const { baseDir, libraryPath, logging, sockPath } = this;
+    const { libraryPath, logging, sockPath } = this;
 
-    const library = new LibraryWorker({ baseDir, libraryPath, logging, sockPath });
+    const library = new LibraryWorker({ libraryPath, logging, sockPath });
     library.init();
     library.on('error', error => this.emit('error', error));
 

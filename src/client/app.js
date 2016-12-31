@@ -5,6 +5,7 @@ const MailBox = require('socket-messenger').MailBox;
 
 const Agent = require('../agent');
 
+const RawAgent = Agent.RawAgent;
 const ENV_ROLE = process.env.ROLE;
 const name = `${ENV_ROLE}@${process.pid}`;
 const SOCK_PATH = process.env.SOCK_PATH;
@@ -14,18 +15,17 @@ class App extends Base {
     super();
     this.logging = logging;
     this.mailBox = new MailBox({ name, sockPath: SOCK_PATH });
-    this.agent = new Agent({ logging, mailBox: this.mailBox });
+    this.agent = new RawAgent({ logging, mailBox: this.mailBox });
   }
 
   async init() {
     const { mailBox, agent } = this;
-    const { NEED_LIBRARY } = process.env;
 
     await mailBox.init();
 
-    if (NEED_LIBRARY === 'true') {
+    if (process.env.NEED_AGENT === 'true') {
       await agent.init();
-      this.agent = agent;
+      Agent.setAgent(agent);
     }
 
     process.send({ ready: true });
