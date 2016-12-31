@@ -3,9 +3,10 @@
 const assert = require('assert');
 const mm = require('mm');
 const is = require('is-type-of');
+const _ = require('lodash');
 const debug = require('debug')('cluster-dispatch:test:agent');
-const lib = require('./mock/library/lib');
 
+const lib = _.cloneDeep(require('./mock/library/lib'));
 const Agent = require('../').Agent;
 
 let mailBox = null;
