@@ -43,7 +43,7 @@ describe('test/library_handler.test.js', () => {
       handler.invokeLibrary(mail, {
         objName: 'demoLib',
         methodName: 'getUserName',
-        args: [],
+        args: ['yejiayu'],
         isEvent: false,
       });
     });
@@ -86,7 +86,7 @@ describe('test/library_handler.test.js', () => {
       handler.invokeLibrary(mail, {
         objName: 'demoLib',
         methodName: 'getUserNameByPromise',
-        args: [],
+        args: ['yejiayu'],
         isEvent: false,
       });
     });
@@ -108,7 +108,7 @@ describe('test/library_handler.test.js', () => {
       handler.invokeLibrary(mail, {
         objName: 'demoLib',
         methodName: 'getUserNameByGen',
-        args: [],
+        args: ['yejiayu'],
         isEvent: false,
       });
     });

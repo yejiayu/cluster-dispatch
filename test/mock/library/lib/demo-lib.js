@@ -1,19 +1,19 @@
 'use strict';
 
 const demoLib = {
-  getUserName() {
-    return { name: 'yejiayu' };
+  getUserName(name) {
+    return { name };
   },
 
-  getUserNameByPromise() {
+  getUserNameByPromise(name) {
     return new Promise((resolve) =>
-       resolve({ name: 'yejiayu' })
+       resolve({ name })
     );
   },
 
-  * getUserNameByGen() {
+  * getUserNameByGen(name) {
     return yield new Promise((resolve) =>
-       resolve({ name: 'yejiayu' })
+       resolve({ name })
     );
   },
 };
