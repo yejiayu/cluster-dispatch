@@ -13,7 +13,7 @@ const util = {
 
       return true;
     } catch (error) {
-      debug(error);
+      /* istanbul ignore next */
       return false;
     }
   },

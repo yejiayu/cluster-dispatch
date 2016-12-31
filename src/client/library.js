@@ -65,6 +65,7 @@ class Library extends Base {
         handler.getAgents(mail);
         break;
 
+      /* istanbul ignore next */
       default:
         mail.reply('');
     }
