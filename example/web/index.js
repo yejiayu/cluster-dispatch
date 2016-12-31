@@ -3,9 +3,8 @@
 const debug = require('debug')('cluster-dispatch:web');
 const koa = require('koa');
 
-const common = require('../common');
+const agent = require('../agent');
 
-const agent = common.agent;
 const app = koa();
 
 app.use(function* helloWorld() {
@@ -13,7 +12,6 @@ app.use(function* helloWorld() {
   debug(userName);
 
   const rpDemo = yield agent.rpDemo.getRpDemo();
-  // debug(userName);
   debug(rpDemo);
 
   this.body = 'hello world';
