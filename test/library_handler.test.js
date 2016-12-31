@@ -112,5 +112,26 @@ describe('test/library_handler.test.js', () => {
         isEvent: false,
       });
     });
+
+    it('invoke field', function* () {
+      const handler = new Handler({
+        logging: debug,
+        lib,
+      });
+      yield handler.init();
+      const mail = new Mail();
+
+      mail.from = 'test';
+      mail.on('reply', data => {
+        const message = data[0];
+        assert.equal(message, 'yejiayu');
+      });
+
+      handler.invokeLibrary(mail, {
+        objName: 'demoLib',
+        methodName: 'name',
+        isEvent: false,
+      });
+    });
   });
 });
