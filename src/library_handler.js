@@ -27,8 +27,8 @@ class Handler extends EventEmitter {
     if (!invokeParams) {
       return;
     }
-    const { parsedLib } = this;
-    const { objName, methodName, args, isEvent, logging } = invokeParams;
+    const { parsedLib, logging } = this;
+    const { objName, methodName, args, isEvent } = invokeParams;
     const method = parsedLib[objName][methodName];
     const that = this;
 
