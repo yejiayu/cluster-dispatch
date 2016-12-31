@@ -3,8 +3,7 @@
 const EventEmitter = require('events');
 
 class Event extends EventEmitter {
-  getTest(...rest) {
-    const [cb] = rest;
+  getTest(cb) {
     cb('emit test');
   }
 }

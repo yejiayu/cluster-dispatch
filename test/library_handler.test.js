@@ -9,8 +9,8 @@ const Handler = require('../lib/library_handler');
 const lib = _.cloneDeep(require('./mock/library/lib'));
 
 class Mail extends EventEmitter {
-  reply(...rest) {
-    this.emit('reply', rest);
+  reply() {
+    this.emit('reply', arguments);
   }
 }
 describe('test/library_handler.test.js', () => {
@@ -36,7 +36,7 @@ describe('test/library_handler.test.js', () => {
 
       mail.from = 'test';
       mail.on('reply', data => {
-        const [message] = data;
+        const message = data[0];
         assert.equal(message.name, 'yejiayu');
       });
 
@@ -57,8 +57,8 @@ describe('test/library_handler.test.js', () => {
       const mail = new Mail();
 
       mail.from = 'test';
-      handler.on('lib-event', ({ eventName }) => {
-        assert.equal(eventName, 'test-emit');
+      handler.on('lib-event', (data) => {
+        assert.equal(data.eventName, 'test-emit');
       });
       handler.invokeLibrary(mail, {
         objName: 'event',
@@ -79,7 +79,7 @@ describe('test/library_handler.test.js', () => {
 
       mail.from = 'test';
       mail.on('reply', data => {
-        const [message] = data;
+        const message = data[0];
         assert.equal(message.name, 'yejiayu');
       });
 
@@ -101,7 +101,7 @@ describe('test/library_handler.test.js', () => {
 
       mail.from = 'test';
       mail.on('reply', data => {
-        const [message] = data;
+        const message = data[0];
         assert.equal(message.name, 'yejiayu');
       });
 
