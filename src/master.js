@@ -47,9 +47,9 @@ class Master extends SDKBase {
     this.needAgent = needLibrary;
 
     if (process.platform === 'win32') {
-      this.sockPath = '\\\\.\\pipe\\pipe-midway';
+      this.sockPath = `\\\\.\\pipe\\pipe-midway-${process.pid}`;
     } else {
-      this.sockPath = path.join(__dirname, '../midway.sock');
+      this.sockPath = path.join(__dirname, `../midway-${process.pid}.sock`);
     }
 
     this.appCluster = null;
