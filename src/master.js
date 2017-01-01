@@ -7,6 +7,7 @@ const path = require('path');
 const Messenger = require('socket-messenger').Messenger;
 const SDKBase = require('sdk-base');
 
+const { exists: fileExists } = require('./util');
 const AppWorker = require('./app_worker');
 const LibraryWorker = require('./library_worker');
 
@@ -50,6 +51,10 @@ class Master extends SDKBase {
       this.sockPath = `\\\\.\\pipe\\pipe-midway-${process.pid}`;
     } else {
       this.sockPath = path.join(__dirname, `../midway-${process.pid}.sock`);
+
+      if (fileExists(this.sockPath)) {
+        fs.unlinkSync(this.sockPath);
+      }
     }
 
     this.appCluster = null;
