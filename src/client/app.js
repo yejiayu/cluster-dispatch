@@ -29,6 +29,7 @@ class App extends Base {
     }
 
     process.send({ ready: true });
+
     this.ready(true);
   }
 }
