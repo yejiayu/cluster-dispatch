@@ -1,26 +1,20 @@
 'use strict';
 
-const debug = require('debug')('cluster-dispatch:test:web');
+const debug = require('debug')('cluster-dispatch:web');
 const koa = require('koa');
+
+const agent = require('../agent');
 
 const app = koa();
 
-exports.init = () => new Promise((resolve) => { app.listen(9999, resolve); });
+app.use(function* helloWorld() {
+  const userName = yield agent.demoLib.getUserName();
+  debug(userName);
 
-exports.start = () => {
-  const agent = require('../agent');
+  const rpDemo = yield agent.rpDemo.getRpDemo();
+  debug(rpDemo);
 
-  app.use(function* helloWorld() {
-    try {
-      const userName = yield agent.demoLib.getUserName('yejiayu');
-      debug(userName);
+  this.body = 'hello world';
+});
 
-      const rpDemo = yield agent.rpDemo.getRpDemo();
-      debug(rpDemo);
-
-      this.body = userName;
-    } catch (e) {
-      debug(e);
-    }
-  });
-};
+app.listen(8000, () => debug('open http://localhost:8000'));

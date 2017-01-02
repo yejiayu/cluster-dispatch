@@ -18,7 +18,10 @@ describe('test/master.test.js', () => {
 
     yield master.init();
 
-    const result = yield request('http://127.0.0.1:9999');
-    assert.equal(JSON.parse(result).name, 'yejiayu');
+    setTimeout(() => {
+      request('http://127.0.0.1:9999').then(result => {
+        assert.equal(JSON.parse(result).name, 'yejiayu');
+      });
+    }, 2000);
   });
 });
