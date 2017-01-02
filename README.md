@@ -60,7 +60,7 @@ const Master = require('cluster-dispatch').Master;
   * @param {Object} options
   *   - {String} baseDir - 工程根路径
   *   - {String} appPath - app进程入口文件, 可以是一个相对路径
-  *   - {String} libraryPath - 需要代理的库的入口文件, 可以是一个相对路径
+  *   - {String} libraryPath - 第三方库入口文件, 具体参照exmaple/lib/index.js, 可以是一个相对路径
   *   - {Number} appWorkerCount - 需要启动的app进程数
   *   - {Funcion} logging - log
   *   - {Boolean} needLibrary - 是否需要启动library进程
@@ -69,7 +69,7 @@ const Master = require('cluster-dispatch').Master;
 const master = new Master({
   baseDir: __dirname,
   logging: debug,
-  appWorkerCount,``
+  appWorkerCount,
 });
 
 (async function initMaster() {
