@@ -50,3 +50,65 @@ $ npm i
 
 $ npm run example
 ````
+# API
+## Master
+master作为守护进程也是应用的入口, 负责启动appWokrer和libraryWorker
+````js
+const Master = require('cluster-dispatch').Master;
+
+/*
+  * @param {Object} options
+  *   - {String} baseDir - 工程根路径
+  *   - {String} appPath - app进程入口文件, 可以是一个相对路径
+  *   - {String} libraryPath - 需要代理的库的入口文件, 可以是一个相对路径
+  *   - {Number} appWorkerCount - 需要启动的app进程数
+  *   - {Funcion} logging - log
+  *   - {Boolean} needLibrary - 是否需要启动library进程
+  *   - {Boolean} needAgent - 是否需要自动启动代理
+ */
+const master = new Master({
+  baseDir: __dirname,
+  logging: debug,
+  appWorkerCount,
+});
+
+co(function* init() {
+  yield master.init(); // 初始化
+
+  master.on('error', error => debug(error));
+}).catch(error => debug(error));
+````
+
+## Agent
+agent负责跨进程的调度, 这个agent实例每个appWorker都有, 默认会在appWorker初始化时创建好
+
+在appWorker中通过Agent.getAgent()就可以拿到agent实例
+
+````js
+// agent/index.js
+'use strict';
+
+const Agent = require('cluster-dispatch').Agent;
+
+module.exports = Agent.getAgent();
+````
+
+# 启动流程
+1. 启动master进程
+2. master fork 出 library worker
+3. library worker 根据实例化master传递的libraryPath参数拿到下面对象签名, 然后触发ready事件给master
+4. master接到ready事件后开始已cluster模式启动app worker
+5. app worker初始化完成后会向library worker请求对象签名, 拿到对象签名后开始初始化agent
+6. agent遍历对象签名, 并且把对象的每个key重写, 类似这样的逻辑
+````js
+agent.invoke = function(objName, methodName, ...rest) {
+    return client.setTo('Library').send({
+      objName,
+      methodName,
+      args: rest,
+    })
+}
+````
+等于拿到你的调用方法后, 把参数原样返回回去, 实际执行还是在library worker中
+
+7. done
