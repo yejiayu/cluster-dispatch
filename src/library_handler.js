@@ -1,8 +1,9 @@
 'use strict';
 
 const co = require('co');
-const EventEmitter = require('events');
+const { EventEmitter } = require('events');
 const is = require('is-type-of');
+const CircularJSON = require('circular-json');
 
 class Handler extends EventEmitter {
   constructor({ logging, lib } = {}) {
@@ -47,7 +48,8 @@ class Handler extends EventEmitter {
           args,
         });
 
-        mail.reply(result);
+        // 有的方法会返回this JSON.stringify会循环引用
+        mail.reply(CircularJSON.stringify(result));
       }
     }()).catch(logging);
   }

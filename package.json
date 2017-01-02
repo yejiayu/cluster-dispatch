@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "cfork": "^1.5.1",
+    "circular-json": "^0.3.1",
     "co": "^4.6.0",
     "debug": "^2.3.0",
     "is-type-of": "^1.0.0",
