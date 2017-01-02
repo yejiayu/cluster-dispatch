@@ -72,11 +72,11 @@ const master = new Master({
   appWorkerCount,
 });
 
-co(function* init() {
-  yield master.init(); // 初始化
+(async function initMaster() {
+  await master.init(); // 初始化
 
   master.on('error', error => debug(error));
-}).catch(error => debug(error));
+})().catch(debug)
 ````
 
 ## Agent
@@ -102,11 +102,11 @@ module.exports = Agent.getAgent();
 6. agent遍历对象签名, 并且把对象的每个key重写, 类似这样的逻辑
 ````js
 agent.invoke = function(objName, methodName, ...rest) {
-    return client.setTo('Library').send({
-      objName,
-      methodName,
-      args: rest,
-    })
+  return client.setTo('Library').send({
+    objName,
+    methodName,
+    args: rest,
+  })
 }
 ````
 等于拿到你的调用方法后, 把参数原样返回回去, 实际执行还是在library worker中
