@@ -1,6 +1,6 @@
 {
   "name": "cluster-dispatch",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "解决Node.js在Cluster模式下的连接/资源复用问题",
   "main": "index.js",
   "scripts": {
