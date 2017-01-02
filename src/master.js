@@ -9,6 +9,7 @@ const SDKBase = require('sdk-base');
 
 const AppWorker = require('./app_worker');
 const LibraryWorker = require('./library_worker');
+const { log } = require('./util');
 
 class Master extends SDKBase {
   /**
@@ -29,7 +30,7 @@ class Master extends SDKBase {
     appPath = 'index.js',
     libraryPath = 'agent/lib/index.js',
     appWorkerCount = os.cpus().length,
-    logging = console.log,
+    logging = log,
     needLibrary = true,
     needAgent = true,
   } = {}) {
@@ -49,7 +50,7 @@ class Master extends SDKBase {
     if (process.platform === 'win32') {
       this.sockPath = `\\\\.\\pipe\\pipe-midway-${process.pid}`;
     } else {
-      this.sockPath = path.join(os.tmpdir(), `midway.sock`);
+      this.sockPath = path.join(os.tmpdir(), 'midway.sock');
     }
 
     this.appCluster = null;

@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs');
-const debug = require('debug')('cluster:util');
 
 const util = {
   exists(path) {
@@ -15,6 +14,14 @@ const util = {
     } catch (error) {
       /* istanbul ignore next */
       return false;
+    }
+  },
+
+  log(msg) {
+    if (msg instanceof Error) {
+      console.trace(msg);
+    } else {
+      console.log(msg);
     }
   },
 };
