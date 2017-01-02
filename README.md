@@ -69,7 +69,7 @@ const Master = require('cluster-dispatch').Master;
 const master = new Master({
   baseDir: __dirname,
   logging: debug,
-  appWorkerCount,
+  appWorkerCount,``
 });
 
 (async function initMaster() {

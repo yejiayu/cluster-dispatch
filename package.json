@@ -9,7 +9,7 @@
     "cov": "npm run build && egg-bin cov",
     "build": "./node_modules/.bin/babel src -d lib",
     "watch": "./node_modules/.bin/babel src -w --out-dir lib",
-    "example": "npm run build && DEBUG=cluster-dispatch:* node example/dispatch.js",
+    "example": "npm run build && DEBUG=cluster-dispatch:* node example/master.js",
     "publish-npm": "npm run build && npm publish"
   },
   "engines": {
