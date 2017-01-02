@@ -72,11 +72,11 @@ const master = new Master({
   appWorkerCount,
 });
 
-co(function* init() {
-  yield master.init(); // 初始化
+(async function initMaster() {
+  await master.init(); // 初始化
 
   master.on('error', error => debug(error));
-}).catch(error => debug(error));
+})().catch(debug)
 ````
 
 ## Agent
