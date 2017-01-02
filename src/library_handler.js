@@ -49,7 +49,11 @@ class Handler extends EventEmitter {
         });
 
         // 有的方法会返回this JSON.stringify会循环引用
-        mail.reply(CircularJSON.stringify(result));
+        if (is.object(result)) {
+          mail.reply(JSON.parse(CircularJSON.stringify(result)));
+        } else {
+          mail.reply(result);
+        }
       }
     }()).catch(logging);
   }
