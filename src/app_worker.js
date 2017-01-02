@@ -2,6 +2,7 @@
 
 const cluster = require('cluster');
 const assert = require('assert');
+const path = require('path');
 const SDKBase = require('sdk-base');
 
 const ROLE = require('./constant/role');
@@ -9,14 +10,15 @@ const util = require('./util');
 
 class AppWorker extends SDKBase {
   constructor({
-    baseDir,
     appWorkerCount,
+    appPath,
     logging,
     sockPath,
     needAgent,
   } = {}) {
     super();
-    this.workerFile = `${baseDir}/index.js`;
+    this.appPath = appPath;
+    this.workerFile = path.join(__dirname, './client/fork_app.js');
     this.workerCount = appWorkerCount;
     this.logging = logging;
     this.sockPath = sockPath;
@@ -31,7 +33,7 @@ class AppWorker extends SDKBase {
   }
 
   init() {
-    const { workerFile, workerCount, logging, sockPath, needAgent } = this;
+    const { workerFile, appPath, workerCount, logging, sockPath, needAgent } = this;
     if (!cluster.isMaster) {
       return;
     }
@@ -42,6 +44,7 @@ class AppWorker extends SDKBase {
         ROLE: ROLE.APP,
         SOCK_PATH: sockPath,
         NEED_AGENT: needAgent,
+        APP_PATH: appPath,
       });
     });
 
