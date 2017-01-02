@@ -92,6 +92,28 @@ const Agent = require('cluster-dispatch').Agent;
 
 module.exports = Agent.getAgent();
 ````
+通过agent调用和正常调用是一样的, 只是得通过agent对象调用
+
+eg
+````js
+// agent/lib/demo.js
+module.exports = {
+  getName() {
+    return new Promise((resolve) => {
+      resolve('get name')
+    });
+  }
+}
+
+// index.js
+const agent = require('./agent')
+
+(async function eg() {
+  const name = await agent.demo.getName()
+  console.log(name) // "get name"
+})().catch(console.error)
+````
+不过因为是跨进程的所以任何调用都是异步的, 即使你调用的原本是个同步方法
 
 # 启动流程
 1. 启动master进程
