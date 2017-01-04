@@ -1,7 +1,7 @@
 'use strict';
 
 const LibraryClient = require('./library');
-const { log } = require('../util');
+const log = require('../util').log('cluster:library_worker');
 
 const libPath = process.env.LIBRARY_PATH;
 const lib = require(libPath);

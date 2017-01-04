@@ -9,7 +9,7 @@ const SDKBase = require('sdk-base');
 
 const AppWorker = require('./app_worker');
 const LibraryWorker = require('./library_worker');
-const { log } = require('./util');
+const log = require('./util').log('master:');
 
 class Master extends SDKBase {
   /**
@@ -108,7 +108,9 @@ module.exports = Master;
 
 function ready(obj) {
   return new Promise((resolve, reject) => {
-    const timeoutFlag = setTimeout(reject, 4000);
+    const timeoutFlag = setTimeout(() => {
+      reject(`${obj.constructor.name} ready fail`);
+    }, 10000);
     obj.ready(() => {
       clearTimeout(timeoutFlag);
       resolve();

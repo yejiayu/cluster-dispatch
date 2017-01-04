@@ -17,12 +17,14 @@ const util = {
     }
   },
 
-  log(msg) {
-    if (msg instanceof Error) {
-      console.trace(msg);
-    } else {
-      console.log(msg);
-    }
+  log(name) {
+    return msg => {
+      if (msg instanceof Error) {
+        console.trace(`${name} ${msg}`);
+      } else {
+        console.log(`${name} ${msg}`);
+      }
+    };
   },
 };
 

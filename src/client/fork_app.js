@@ -1,6 +1,6 @@
 'use strict';
 
-const { log } = require('../util');
+const log = require('../util').log('cluster:app_worker');
 const AppClient = require('./app');
 
 const appPath = process.env.APP_PATH;
@@ -11,5 +11,9 @@ const appPath = process.env.APP_PATH;
   await appClient.init();
   appClient.on('error', log);
 
-  require(appPath);
+  try {
+    require(appPath);
+  } catch (e) {
+    log(e);
+  }
 }()).catch(log);
