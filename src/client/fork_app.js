@@ -5,7 +5,6 @@ const AppClient = require('./app');
 
 const appPath = process.env.APP_PATH;
 
-
 (async function forkApp() {
   const appClient = new AppClient({ logging: log });
   await appClient.init();

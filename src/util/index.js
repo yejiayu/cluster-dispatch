@@ -20,7 +20,7 @@ const util = {
   log(name) {
     return msg => {
       if (msg instanceof Error) {
-        console.trace(`${name} ${msg}`);
+        console.error(`${name} ${msg.stack}`);
       } else {
         console.log(`${name} ${msg}`);
       }
