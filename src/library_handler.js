@@ -89,7 +89,7 @@ function getMethodByProto(obj) {
   const result = {};
   const prototypeKeys = Object.getOwnPropertyNames(obj);
   prototypeKeys.filter(key => !key.startsWith('_'))
-      .reduce((curr, pre) => result[pre] = { type: typeof obj[pre] });
+      .reduce((curr, pre) => result[pre] = { key: pre });
 
   const prototypeObj = Object.getPrototypeOf(obj);
 
