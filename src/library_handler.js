@@ -1,6 +1,7 @@
 'use strict';
 
 const co = require('co');
+const { merge } = require('lodash');
 const { EventEmitter } = require('events');
 const is = require('is-type-of');
 const CircularJSON = require('circular-json');
@@ -86,33 +87,16 @@ function getLibSignature(lib) {
 
 function getMethodByProto(obj) {
   const result = {};
+  const prototypeKeys = Object.getOwnPropertyNames(obj);
+  prototypeKeys.filter(key => !key.startsWith('_'))
+      .reduce((curr, pre) => result[pre] = { type: typeof obj[pre] });
 
-  if (obj instanceof EventEmitter) {
-    const eventMethods = Object.getOwnPropertyNames(EventEmitter.prototype);
-    for (const methodKey of eventMethods) {
-      result[methodKey] = { type: typeof EventEmitter[methodKey], from: 'super' };
-    }
+  const prototypeObj = Object.getPrototypeOf(obj);
+
+  if (!prototypeObj) {
+    return [];
   }
-
-  const prototypeKeys = Object.getOwnPropertyNames(obj.constructor.prototype);
-  for (const prototypeKey of prototypeKeys) {
-    if (!prototypeKey.startsWith('_')) {
-      const type = typeof obj[prototypeKey];
-
-      result[prototypeKey] = { type, from: 'prototype' };
-    }
-  }
-
-  const fieldKeys = Object.getOwnPropertyNames(obj);
-  for (const fieldKey of fieldKeys) {
-    if (!fieldKey.startsWith('_')) {
-      const type = typeof obj[fieldKey];
-
-      result[fieldKey] = { type, from: 'field' };
-    }
-  }
-
-  return result;
+  return merge(result, getMethodByProto(prototypeObj));
 }
 
 async function invokeFieldOrMethod({ ctx, attr, args }) {
