@@ -10,7 +10,7 @@
     "build": "./node_modules/.bin/babel src -d lib",
     "watch": "./node_modules/.bin/babel src -w --out-dir lib",
     "example": "npm run build && DEBUG=cluster-dispatch:* node example/master.js",
-    "publish": "npm run build && npm publish"
+    "prepublish": "npm run build"
   },
   "engines": {
     "node": ">=4.6.1"
