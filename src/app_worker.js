@@ -63,11 +63,20 @@ class AppWorker extends SDKBase {
     cluster.on('error', error => logging(error.stack));
 
     cluster.on('exit', (worker, code, signal) => {
+      logging('app worker exit pid=%s code=%s signal=%s', worker.process.pid, code, signal);
+
       this.workerMap.delete(worker.process.pid);
       worker.removeAllListeners();
       this._readyCount -= 1;
 
-      logging('app worker exit pid=%s code=%s signal=%s', worker.process.pid, code, signal);
+      if (process.env.NODE_ENV === 'production') {
+        cluster.fork({
+          ROLE: ROLE.APP,
+          SOCK_PATH: sockPath,
+          NEED_AGENT: needAgent,
+          APP_PATH: appPath,
+        });
+      }
     });
   }
 
