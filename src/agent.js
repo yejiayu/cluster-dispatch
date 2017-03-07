@@ -87,7 +87,7 @@ class Agent {
       }
 
       default:
-        _logging('default');
+        _logging.info('default');
     }
   }
 }

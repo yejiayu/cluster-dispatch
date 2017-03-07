@@ -53,17 +53,17 @@ class AppWorker extends SDKBase {
 
       worker.on('message', message => this._onReady(message));
 
-      logging('app worker fork pid=%s', worker.process.pid);
+      logging.info(`app worker fork pid = ${worker.process.pid}`);
     });
 
     cluster.on('disconnect', worker => {
-      logging('app worker disconnect pid=%s', worker.process.pid);
+      logging.info(`app worker disconnect pid = ${worker.process.pid}`);
     });
 
-    cluster.on('error', error => logging(error.stack));
+    cluster.on('error', logging.error);
 
     cluster.on('exit', (worker, code, signal) => {
-      logging('app worker exit pid=%s code=%s signal=%s', worker.process.pid, code, signal);
+      logging.error(`app worker exit pid = ${worker.process.pid}, code = ${code}, signal = ${signal}`);
 
       this.workerMap.delete(worker.process.pid);
       worker.removeAllListeners();

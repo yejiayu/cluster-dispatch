@@ -8,11 +8,11 @@ const appPath = process.env.APP_PATH;
 (async function forkApp() {
   const appClient = new AppClient({ logging: log });
   await appClient.init();
-  appClient.on('error', log);
+  appClient.on('error', log.error);
 
   try {
     require(appPath);
   } catch (e) {
     log(e);
   }
-}()).catch(log);
+}()).catch(log.error);

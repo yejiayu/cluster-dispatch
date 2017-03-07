@@ -42,11 +42,11 @@ class LibraryWorker extends SDKBase {
       }
     });
 
-    logging(`library worker fork pid=${worker.pid}`);
+    logging.info(`library worker fork pid = ${worker.pid}`);
 
-    worker.on('error', error => logging(error.stack));
+    worker.on('error', logging.error);
     worker.once('exit', (code, signal) => {
-      logging(`library worker exit code=${code} signal=${signal}`);
+      logging.error(`library worker exit code = ${code}, signal = ${signal}`);
 
       worker.removeAllListeners();
       if (process.env.NODE_ENV === 'production') {

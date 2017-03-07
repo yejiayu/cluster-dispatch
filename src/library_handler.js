@@ -56,7 +56,7 @@ class Handler extends EventEmitter {
           mail.reply(result);
         }
       }
-    }()).catch(logging);
+    }()).catch(logging.error);
   }
 }
 

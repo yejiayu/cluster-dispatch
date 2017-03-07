@@ -9,7 +9,7 @@ const SDKBase = require('sdk-base');
 
 const AppWorker = require('./app_worker');
 const LibraryWorker = require('./library_worker');
-const log = require('./util').log('master:');
+const util = require('./util');
 
 class Master extends SDKBase {
   /**
@@ -20,7 +20,7 @@ class Master extends SDKBase {
    *   - {String} appPath - app进程入口文件, 可以是一个相对路径
    *   - {String} libraryPath - 需要代理的库的入口文件, 可以是一个相对路径
    *   - {Number} appWorkerCount - 需要启动的app进程数
-   *   - {Funcion} logging - log
+   *   - {Object} logging - console like
    *   - {Boolean} needLibrary - 是否需要启动library进程
    *   - {Boolean} needAgent - 是否需要自动启动代理
    * @constructor
@@ -30,7 +30,7 @@ class Master extends SDKBase {
     appPath = 'index.js',
     libraryPath = 'agent/lib/index.js',
     appWorkerCount = os.cpus().length,
-    logging = log,
+    logging,
     needLibrary = true,
     needAgent = true,
   } = {}) {
@@ -43,7 +43,7 @@ class Master extends SDKBase {
     this.appPath = path.join(baseDir, appPath);
     this.libraryPath = path.join(baseDir, libraryPath);
     this.appWorkerCount = appWorkerCount;
-    this.logging = logging;
+    this.logging = util.log('master:', logging);
     this.needLibrary = needLibrary;
     this.needAgent = needLibrary;
 
@@ -89,7 +89,7 @@ class Master extends SDKBase {
     appCluster.init();
     appCluster.on('error', error => this.emit('error', error));
 
-    this.logging('start app');
+    this.logging.info('start app');
     return appCluster;
   }
 

@@ -10,5 +10,5 @@ const lib = require(libPath);
   const libraryClient = new LibraryClient({ logging: log, lib });
   await libraryClient.init();
 
-  libraryClient.on('error', log);
-}()).catch(log);
+  libraryClient.on('error', log.error);
+}()).catch(log.error);
