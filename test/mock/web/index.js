@@ -8,13 +8,18 @@ const agent = require('../agent');
 const app = koa();
 
 app.use(function* helloWorld() {
-  const userName = yield agent.demoLib.getUserName();
-  debug(userName);
+  try {
+    const userName = yield agent.demoLib.getUserName();
+    debug(userName);
 
-  const rpDemo = yield agent.rpDemo.getRpDemo();
-  debug(rpDemo);
+    const rpDemo = yield agent.rpDemo.getRpDemo();
+    debug(rpDemo);
 
-  this.body = 'hello world';
+    console.log(yield agent.demoLib.getUserName());
+    this.body = userName;
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 app.listen(8000, () => debug('open http://localhost:8000'));

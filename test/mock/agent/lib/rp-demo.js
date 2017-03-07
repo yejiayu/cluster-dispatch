@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function* rpDemo() {
-  yield new Promise((resolve, reject) => {
+module.exports = async () => {
+  await new Promise((resolve, reject) => {
     setTimeout(resolve, 10);
   });
 
