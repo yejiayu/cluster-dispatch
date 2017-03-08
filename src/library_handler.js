@@ -86,15 +86,19 @@ function getLibSignature(lib) {
 }
 
 function getMethodByProto(obj) {
-  const result = {};
   const prototypeKeys = Object.getOwnPropertyNames(obj);
-  prototypeKeys.filter(key => !key.startsWith('_'))
-      .reduce((curr, pre) => result[pre] = { key: pre });
+
+  const result = prototypeKeys
+      .filter(key => !key.startsWith('_'))
+      .reduce((cur, pre) => {
+        cur[pre] = { key: pre };
+        return cur;
+      }, {});
 
   const prototypeObj = Object.getPrototypeOf(obj);
 
   if (!prototypeObj) {
-    return [];
+    return {};
   }
   return merge(result, getMethodByProto(prototypeObj));
 }
@@ -102,7 +106,6 @@ function getMethodByProto(obj) {
 async function invokeFieldOrMethod({ ctx, attr, args }) {
   if (is.function(attr)) {
     const result = await attr.apply(ctx, args);
-
     if (is.generator(result)) {
       return await co.wrap(attr).apply(ctx, args);
     }

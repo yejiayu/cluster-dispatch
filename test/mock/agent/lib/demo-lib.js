@@ -4,7 +4,7 @@ const demoLib = {
   name: 'yejiayu',
 
   getUserName(name) {
-    return { name };
+    return { name: 'yejiayu' };
   },
 
   getUserNameByPromise(name) {
