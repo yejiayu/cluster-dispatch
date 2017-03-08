@@ -11,13 +11,13 @@ const name = `${ENV_ROLE}`;
 
 
 class Library extends Base {
-  constructor({ logging, lib } = {}) {
+  constructor({ logger, lib } = {}) {
     super();
 
     this.lib = lib;
-    this.logging = logging;
+    this.logger = logger;
     this.mailBox = new MailBox({ name, sockPath: SOCK_PATH });
-    this.handler = new Handler({ lib, logging });
+    this.handler = new Handler({ lib, logger });
   }
 
   async init() {
