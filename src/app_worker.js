@@ -12,7 +12,7 @@ class AppWorker extends SDKBase {
   constructor({
     appWorkerCount,
     appPath,
-    logging,
+    logger,
     sockPath,
     needAgent,
   } = {}) {
@@ -20,7 +20,7 @@ class AppWorker extends SDKBase {
     this.appPath = appPath;
     this.workerFile = path.join(__dirname, './client/fork_app.js');
     this.workerCount = appWorkerCount;
-    this.logging = logging;
+    this.logger = logger;
     this.sockPath = sockPath;
     this.needAgent = needAgent;
 
@@ -33,7 +33,7 @@ class AppWorker extends SDKBase {
   }
 
   init() {
-    const { workerFile, appPath, workerCount, logging, sockPath, needAgent } = this;
+    const { workerFile, appPath, workerCount, logger, sockPath, needAgent } = this;
     if (!cluster.isMaster) {
       return;
     }
@@ -53,17 +53,17 @@ class AppWorker extends SDKBase {
 
       worker.on('message', message => this._onReady(message));
 
-      logging.info(`app worker fork pid = ${worker.process.pid}`);
+      logger.info(`app worker fork pid = ${worker.process.pid}`);
     });
 
     cluster.on('disconnect', worker => {
-      logging.info(`app worker disconnect pid = ${worker.process.pid}`);
+      logger.info(`app worker disconnect pid = ${worker.process.pid}`);
     });
 
-    cluster.on('error', logging.error);
+    cluster.on('error', logger.error);
 
     cluster.on('exit', (worker, code, signal) => {
-      logging.error(`app worker exit pid = ${worker.process.pid}, code = ${code}, signal = ${signal}`);
+      logger.error(`app worker exit pid = ${worker.process.pid}, code = ${code}, signal = ${signal}`);
 
       this.workerMap.delete(worker.process.pid);
       worker.removeAllListeners();

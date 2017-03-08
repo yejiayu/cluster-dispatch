@@ -11,10 +11,10 @@ const ROLE = require('./constant/role');
 const util = require('./util');
 
 class LibraryWorker extends SDKBase {
-  constructor({ libraryPath, logging, sockPath } = {}) {
+  constructor({ libraryPath, logger, sockPath } = {}) {
     super();
     this.libraryPath = libraryPath;
-    this.logging = logging;
+    this.logger = logger;
     this.sockPath = sockPath;
 
     assert(util.exists(this.libraryPath), `libraryPath ${this.libraryPath} 不存在或不是一个文件`);
@@ -27,7 +27,7 @@ class LibraryWorker extends SDKBase {
   }
 
   fork() {
-    const { libraryPath, logging, sockPath } = this;
+    const { libraryPath, logger, sockPath } = this;
 
     const env = merge(process.env, {
       ROLE: ROLE.LIBRARY,
@@ -42,11 +42,11 @@ class LibraryWorker extends SDKBase {
       }
     });
 
-    logging.info(`library worker fork pid = ${worker.pid}`);
+    logger.info(`library worker fork pid = ${worker.pid}`);
 
-    worker.on('error', logging.error);
+    worker.on('error', logger.error);
     worker.once('exit', (code, signal) => {
-      logging.error(`library worker exit code = ${code}, signal = ${signal}`);
+      logger.error(`library worker exit code = ${code}, signal = ${signal}`);
 
       worker.removeAllListeners();
       if (process.env.NODE_ENV === 'production') {

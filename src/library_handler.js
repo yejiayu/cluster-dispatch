@@ -5,14 +5,18 @@ const { merge } = require('lodash');
 const { EventEmitter } = require('events');
 const is = require('is-type-of');
 const CircularJSON = require('circular-json');
+const log = require('./util').log('library_handler:');
 
 class Handler extends EventEmitter {
-  constructor({ logging, lib } = {}) {
+  constructor({
+    logger = log,
+    lib,
+  } = {}) {
     super();
 
     this.lib = lib;
     this.parsedLib = null;
-    this.logging = logging;
+    this.logger = logger;
   }
 
   async init() {
@@ -29,7 +33,7 @@ class Handler extends EventEmitter {
     if (!invokeParams) {
       return;
     }
-    const { parsedLib, logging } = this;
+    const { parsedLib, logger } = this;
     const { objName, methodName, args, isEvent } = invokeParams;
     const attr = parsedLib[objName][methodName];
     const that = this;
@@ -56,7 +60,7 @@ class Handler extends EventEmitter {
           mail.reply(result);
         }
       }
-    }()).catch(logging.error);
+    }()).catch(logger.error);
   }
 }
 

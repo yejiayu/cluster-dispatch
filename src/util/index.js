@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const { isFunction, isObject, has } = require('lodash');
+const { isFunction } = require('lodash');
 
 const util = {
   exists(path) {
@@ -20,18 +20,13 @@ const util = {
 
   log(name, logging) {
     if (isFunction(logging)) {
-      console.warn('WARNING!' +
-        'logging should be an Object with error and debug Functions like console');
+      console.warn('WARNING! logging param in cluster-dispatch will be removed in v3,' +
+        ' please use logger param like log4js instead');
       return {
         info: logging,
         error: logging,
       };
     }
-
-    if (isObject(logging) && has(logging, 'debug') && has(logging, 'error')) {
-      return logging;
-    }
-
     return {
       info(msg) {
         console.log(`${name} ${msg}`);
