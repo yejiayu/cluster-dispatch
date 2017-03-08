@@ -11,11 +11,11 @@ const name = `${ENV_ROLE}@${process.pid}`;
 const SOCK_PATH = process.env.SOCK_PATH;
 
 class App extends Base {
-  constructor({ logging } = {}) {
+  constructor({ logger } = {}) {
     super();
-    this.logging = logging;
+    this.logger = logger;
     this.mailBox = new MailBox({ name, sockPath: SOCK_PATH });
-    this.agent = new RawAgent({ logging, mailBox: this.mailBox });
+    this.agent = new RawAgent({ logger, mailBox: this.mailBox });
   }
 
   async init() {

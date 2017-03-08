@@ -7,8 +7,8 @@ const is = require('is-type-of');
 class LibEvent extends EventEmitter {}
 
 class Agent {
-  constructor({ logging, mailBox } = {}) {
-    this._logging = logging;
+  constructor({ logger, mailBox } = {}) {
+    this._logger = logger;
     this._mailBox = mailBox;
     this._eventMap = new Map();
   }
@@ -73,7 +73,7 @@ class Agent {
   }
 
   mailHandler(mail) {
-    const { _logging } = this;
+    const { _logger } = this;
     const { message } = mail;
     const { action } = message;
 
@@ -87,7 +87,7 @@ class Agent {
       }
 
       default:
-        _logging('default');
+        _logger.info('default');
     }
   }
 }

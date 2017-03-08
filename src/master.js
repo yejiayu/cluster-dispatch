@@ -9,7 +9,7 @@ const SDKBase = require('sdk-base');
 
 const AppWorker = require('./app_worker');
 const LibraryWorker = require('./library_worker');
-const log = require('./util').log('master:');
+const util = require('./util');
 
 class Master extends SDKBase {
   /**
@@ -20,7 +20,8 @@ class Master extends SDKBase {
    *   - {String} appPath - app进程入口文件, 可以是一个相对路径
    *   - {String} libraryPath - 需要代理的库的入口文件, 可以是一个相对路径
    *   - {Number} appWorkerCount - 需要启动的app进程数
-   *   - {Funcion} logging - log
+   *   - {Funcion} logging - log, v3版本移除
+   *   - {Object} logger - console like
    *   - {Boolean} needLibrary - 是否需要启动library进程
    *   - {Boolean} needAgent - 是否需要自动启动代理
    * @constructor
@@ -30,7 +31,8 @@ class Master extends SDKBase {
     appPath = 'index.js',
     libraryPath = 'agent/lib/index.js',
     appWorkerCount = os.cpus().length,
-    logging = log,
+    logging,
+    logger,
     needLibrary = true,
     needAgent = true,
   } = {}) {
@@ -43,7 +45,8 @@ class Master extends SDKBase {
     this.appPath = path.join(baseDir, appPath);
     this.libraryPath = path.join(baseDir, libraryPath);
     this.appWorkerCount = appWorkerCount;
-    this.logging = logging;
+    this.logging = util.log('master:', logging);
+    this.logger = logger === undefined ? this.logging : logger;
     this.needLibrary = needLibrary;
     this.needAgent = needLibrary;
 
@@ -81,7 +84,7 @@ class Master extends SDKBase {
       baseDir: this.baseDir,
       appPath: this.appPath,
       appWorkerCount: this.appWorkerCount,
-      logging: this.logging,
+      logger: this.logger,
       sockPath: this.sockPath,
       needLibrary: this.needLibrary,
       needAgent: this.needAgent,
@@ -89,14 +92,14 @@ class Master extends SDKBase {
     appCluster.init();
     appCluster.on('error', error => this.emit('error', error));
 
-    this.logging('start app');
+    this.logger.info('start app');
     return appCluster;
   }
 
   startLibrary() {
-    const { libraryPath, logging, sockPath } = this;
+    const { libraryPath, logger, sockPath } = this;
 
-    const library = new LibraryWorker({ libraryPath, logging, sockPath });
+    const library = new LibraryWorker({ libraryPath, logger, sockPath });
     library.init();
     library.on('error', error => this.emit('error', error));
 
